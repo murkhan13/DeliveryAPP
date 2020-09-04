@@ -22,8 +22,8 @@ RUN pip install --no-binary pillow pillow
 # install psycopg2 dependencies
 RUN apk update && apk add  make git libffi-dev openssl-dev python3-dev libxml2-dev libxslt-dev postgresql-dev  musl-dev
 
-# RUN apk update \
-#     && apk add postgresql-dev gcc python3-dev musl-dev
+RUN apk update \
+    && apk add postgresql-dev gcc python3-dev musl-dev
 
 # install dependencies
 RUN pip3 install --upgrade pip
@@ -33,10 +33,11 @@ RUN pip3 install --upgrade pip
 COPY ./requirements.txt /requirements.txt
 RUN pip3 install -r requirements.txt
 RUN apk del .tmp
-RUN mkdir /app
+RUN mkdir -p app
 COPY ./cronDeliveryAPI /app/
-# ADD ./cronDeliveryAPI /app
-WORKDIR /app
+ADD . .
+WORKDIR cronDeliveryAPI
+
 COPY ./scripts /scripts
 
 RUN chmod +x /scripts/*
