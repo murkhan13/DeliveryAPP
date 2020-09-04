@@ -1,0 +1,1 @@
+web: gunicorn cronProjectAPI.wsgi --log-file -
