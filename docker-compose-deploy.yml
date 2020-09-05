@@ -1,19 +1,25 @@
 version: '3.7'
+
 services:
   app:
-    container_name: delivery-app
     build:
       context: .
-      dockerfile: ./Dockerfile
-    ports:
-      - "8000:8000"
     volumes:
-      - ./app:/app
-    command: sh -c "whoami && ls  && python3 manage.py runserver 0.0.0.0:8000 " #python3 manage.py runserver 0.0.0.0:8000
+      - static_data:/vol/web
     environment:
-      - DEBUG=1
-    env_file:
-      - ./.env
+      # - SECRET_KEY = ps7(e&!!l(kbsmr$76qia@(zi%p=^w-r=(+()ex!33*pyd*8x^
+      - ALLOWED_HOSTS=127.0.0.1, localhost
+
+  proxy:
+    build:
+      context: ./proxy
+    volumes:
+      - static_data:/vol/static
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+
   db:
     image: postgres
     ports:
@@ -26,5 +32,6 @@ services:
       - POSTGRES_DB=crondelivery
     env_file:
       - ./.env
+
 volumes:
-  postgres_data:
+  static_data:
