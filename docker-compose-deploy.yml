@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   app:
+    container_name: delivery-app
     build:
       context: .
     volumes:
