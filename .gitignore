@@ -1,2 +1,5 @@
 deliveryAPP_env/
-media/*
+cronDeliveryAPI/media/category_imgs/
+cronDeliveryAPI/media/dishes_imgs/
+cronDeliveryAPI/media/logos/
+cronDeliveryAPI/media/restaurant/
