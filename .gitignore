@@ -1,3 +1,2 @@
 deliveryAPP_env/
-crondDeliveryAPI/
-    media/
+crondDeliveryAPI/media/*
