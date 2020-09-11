@@ -53,6 +53,7 @@ USER user
 CMD ["entrypoint.sh"]
 ENTRYPOINT ["../scripts/entrypoint.sh"]
 
+
 # copy entrypoint.sh
 # COPY ./entrypoint.sh .
 
