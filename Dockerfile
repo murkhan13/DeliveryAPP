@@ -31,6 +31,7 @@ RUN pip3 install --upgrade pip
 # ADD . /home/mozley/Desktop/Django/DeliveryAPP
 
 COPY ./requirements.txt /requirements.txt
+COPY ./scripts /scripts
 RUN pip3 install -r requirements.txt
 RUN apk del .tmp
 RUN mkdir -p app
@@ -38,7 +39,7 @@ COPY ./cronDeliveryAPI /app/
 ADD . .
 WORKDIR cronDeliveryAPI
 
-COPY ./scripts /scripts
+
 
 RUN chmod +x /scripts/*
 
