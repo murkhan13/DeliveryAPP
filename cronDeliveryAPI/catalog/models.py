@@ -32,6 +32,67 @@ class Category(models.Model):
         verbose_name_plural = "Категории"
 
 
+
+
+class Restaurant(models.Model):
+    """
+    Model class that represent a restaurant model
+
+    Args:
+        models ([class]): [model class]
+
+    Returns:
+        [string]: [the title of restaurant and an image image.url]
+    """
+    title           = models.CharField(("Название ресторана"),max_length = 200)
+    rating          = models.FloatField(("Рейтинг"),blank=True, null=True)
+    logo            = models.ImageField(("Логотип Ресторана"),upload_to="logos", default = 'not_found.jpg')
+    image           = models.ImageField(("Картинка ресторана"),upload_to="restaurant", default = 'not_found.jpg')
+    workTime        = models.CharField(("График работы"),max_length = 200, help_text='укажите ')
+    worksFrom       = models.TimeField(auto_now=False, auto_now_add=False, default=timezone.now())
+    worksTo         = models.TimeField(auto_now=False, auto_now_add=False, default=timezone.now())
+    minOrder        = models.IntegerField(("Минимальный заказ"),help_text='Минимальный заказ')
+    freeOrder       = models.IntegerField(("Бесплатная доставка с суммы заказа от:"))
+    address         = models.CharField(("Адрес ресторана"),max_length = 200)
+    delivery        = models.IntegerField(("Стоимость доставки"))
+    deliveryTime    = models.IntegerField(("Среднее время доставки(мин)"), default=60)
+    maxDeliverDist  = models.IntegerField(("Максимальное расстояние для доставки(km)"), default=20)
+    info            = models.CharField(("Информация о ресторане"),max_length=200, help_text='Информация')
+    # sumOfPoints sums everytime user give a feedback with point
+    # and in the view the given sum is dividing by feedBacksAmount integer field
+    # that also increasing everytime user gives a feedback
+    feedbacksAmount = models.IntegerField(default=0)
+    sumOfPoints     = models.IntegerField(default=0)
+
+
+    # categories      = models.ManyToManyField(Category)
+    # categories = models.(Category, related_name = 'categories', on_delete=models.SET_NULL, null = True)
+    latitude        = models.FloatField(("Широта"), blank=True, null=True)
+    longitude       = models.FloatField(("Долгота"), blank=True, null=True)
+    likedUsers      = models.ManyToManyField(User, related_name="favoriteRestaurants")
+
+    class Meta:
+        verbose_name_plural = "Ресторан"
+
+    def __str__(self):
+        return self.title
+
+    def get_image_url(self, obj):
+        return obj.logo.url
+
+
+class RestaurantMenu(models.Model):
+    categories  = models.ManyToManyField(Category, related_name = 'restaurants')
+    restaurant  = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null = True)
+
+    class Meta:
+        verbose_name_plural = "Меню Ресторанов"
+        verbose_name = "Меню ресторана"
+
+    def __str__(self):
+        return self.restaurant.title
+
+
 class Dish(models.Model):
     #Model representing a dish to order
     title           = models.CharField(("Навзание блюда"),max_length = 200, help_text='Назовите блюдо')
@@ -43,6 +104,7 @@ class Dish(models.Model):
                                 help_text="Удерживайте CTRL или COMMAND на Mac, чтобы выбрать больше чем одну категорию.",
                                 related_name='dishes'
                     )
+    restaurant      = models.CharField(max_length=200, verbose_name="Ресторан", blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Блюда"
@@ -97,62 +159,6 @@ class DishExtra(models.Model):
     def __str__(self):
         return self.name
 
-
-class Restaurant(models.Model):
-    """
-    Model class that represent a restaurant model
-
-    Args:
-        models ([class]): [model class]
-
-    Returns:
-        [string]: [the title of restaurant and an image image.url]
-    """
-    title           = models.CharField(("Название ресторана"),max_length = 200)
-    rating          = models.FloatField(("Рейтинг"),blank=True, null=True)
-    logo            = models.ImageField(("Логотип Ресторана"),upload_to="logos", default = 'not_found.jpg')
-    image           = models.ImageField(("Картинка ресторана"),upload_to="restaurant", default = 'not_found.jpg')
-    workTime        = models.CharField(("График работы"),max_length = 200, help_text='укажите ')
-    minOrder        = models.IntegerField(("Минимальный заказ"),help_text='Минимальный заказ')
-    freeOrder       = models.IntegerField(("Бесплатная доставка с суммы заказа от:"))
-    address         = models.CharField(("Адрес ресторана"),max_length = 200)
-    delivery        = models.IntegerField(("Стоимость доставки"))
-    deliveryTime    = models.IntegerField(("Среднее время доставки(мин)"), default=60)
-    maxDeliverDist  = models.IntegerField(("Максимальное расстояние для доставки(km)"), default=20)
-    info            = models.CharField(("Информация о ресторане"),max_length=200, help_text='Информация')
-    # sumOfPoints sums everytime user give a feedback with point
-    # and in the view the given sum is dividing by feedBacksAmount integer field
-    # that also increasing everytime user gives a feedback
-    feedbacksAmount = models.IntegerField(default=0)
-    sumOfPoints     = models.IntegerField(default=0)
-
-
-    # categories      = models.ManyToManyField(Category)
-    # categories = models.(Category, related_name = 'categories', on_delete=models.SET_NULL, null = True)
-    latitude        = models.FloatField(("Широта"), blank=True, null=True)
-    longitude       = models.FloatField(("Долгота"), blank=True, null=True)
-    likedUsers      = models.ManyToManyField(User, related_name="favoriteRestaurants")
-
-    class Meta:
-        verbose_name_plural = "Ресторан"
-
-    def __str__(self):
-        return self.title
-
-    def get_image_url(self, obj):
-        return obj.logo.url
-
-
-class RestaurantMenu(models.Model):
-    categories  = models.ManyToManyField(Category, related_name = 'restaurants')
-    restaurant  = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null = True)
-
-    class Meta:
-        verbose_name_plural = "Меню Ресторанов"
-        verbose_name = "Меню ресторана"
-
-    def __str__(self):
-        return self.restaurant.title
 
 
 class Offer(models.Model):

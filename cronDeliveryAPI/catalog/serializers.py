@@ -101,6 +101,8 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
             'logo',
             'image',
             'workTime',
+            'worksFrom',
+            'worksTo',
             'minOrder',
             'freeOrder',
             'address',

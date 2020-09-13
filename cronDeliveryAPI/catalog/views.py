@@ -161,7 +161,7 @@ class GlobalSearchView(APIView):
 
 class RestaurantView(ListModelMixin, GenericAPIView):
     permission_classes = [AllowAny, ]
-    queryset = Restaurant.objects.all()
+    queryset = Restaurant.objects.filter(worksFrom__lte=timezone.now(), worksTo__gte=timezone.now())
     serializer_class = RestaurantDetailSerializer
 
     def get(self, request,*args, **kwargs):
