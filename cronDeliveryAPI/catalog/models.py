@@ -48,7 +48,7 @@ class Restaurant(models.Model):
     rating          = models.FloatField(("Рейтинг"),blank=True, null=True)
     logo            = models.ImageField(("Логотип Ресторана"),upload_to="logos", default = 'not_found.jpg')
     image           = models.ImageField(("Картинка ресторана"),upload_to="restaurant", default = 'not_found.jpg')
-    workTime        = models.CharField(("График работы"),max_length = 200, help_text='укажите ')
+    # workTime        = models.CharField(("График работы"),max_length = 200, help_text='укажите ')
     worksFrom       = models.TimeField(auto_now=False, auto_now_add=False, default=timezone.now())
     worksTo         = models.TimeField(auto_now=False, auto_now_add=False, default=timezone.now())
     minOrder        = models.IntegerField(("Минимальный заказ"),help_text='Минимальный заказ')
