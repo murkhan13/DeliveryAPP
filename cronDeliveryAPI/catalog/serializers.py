@@ -100,7 +100,6 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
             'title',
             'logo',
             'image',
-            'workTime',
             'worksFrom',
             'worksTo',
             'minOrder',

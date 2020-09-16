@@ -5,7 +5,7 @@ services:
     container_name: delivery-app
     build:
       context: .
-    command: uwsgi --socket :8000 --master --enable-threads --module cronDeliveryAPI.wsgi
+    command: sh -c "uwsgi --socket :8000 --master --enable-threads --module cronProjectAPI.wsgi"
     volumes:
       - static_data:/vol/web
     environment:

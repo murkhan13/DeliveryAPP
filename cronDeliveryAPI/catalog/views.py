@@ -10,6 +10,7 @@ from itertools import chain
 from django.db.models import Prefetch, Q, FilteredRelation
 from cronProjectAPI.settings import ALLOWED_HOSTS
 from django.contrib.auth.models import AnonymousUser
+from datetime import datetime
 
 from knox.auth import TokenAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
@@ -161,11 +162,28 @@ class GlobalSearchView(APIView):
 
 class RestaurantView(ListModelMixin, GenericAPIView):
     permission_classes = [AllowAny, ]
-    queryset = Restaurant.objects.filter(worksFrom__lte=timezone.now(), worksTo__gte=timezone.now())
+    # queryset = Restaurant.objects.filter(worksFrom__lte=timezone.now()).filter(worksTo__gte=timezone.now())
     serializer_class = RestaurantDetailSerializer
 
     def get(self, request,*args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        working = []
+        closed = []
+        for restaurant in Restaurant.objects.all():
+            if restaurant.worksFrom < timezone.now().time() < restaurant.worksTo:
+                working.append(restaurant)
+            else:
+                closed.append(restaurant)
+        # working     = Restaurant.objects.filter(worksFrom__lt=timezone.now().time(), worksTo__gt=timezone.now().time())
+        # closed      = Restaurant.objects.filter(worksFrom__gt=timezone.now().time(), worksTo__lt=timezone.now().time())
+        openSer     = RestaurantDetailSerializer(working, many=True, context={"request":request})
+        closedSer   = RestaurantDetailSerializer(closed, many=True, context={"request": request})
+        print('time: ', timezone.now().time())
+
+        #return self.list(request, *args, **kwargs)
+        return Response({
+            "open": openSer.data,
+            "closed": closedSer.data
+        })
         # here gonna be the the query of nearest restaurants
 
 """
@@ -411,7 +429,7 @@ class CartItemAddView(APIView):
                     break
 
         if flag == False:
-            img_url = 'https://' + ALLOWED_HOSTS[0] + dish.image.url
+            img_url = 'https://' + ALLOWED_HOSTS[0] + ":8080" + dish.image.url
             try:
                 new_cart_item = CartItem.objects.create(
                         cart=cart,
@@ -420,6 +438,7 @@ class CartItemAddView(APIView):
                         price=dish.price,
                         image=img_url,
                         description=dish.description,
+                        restaurant=dish.restaurant,
                         portionWeight=dish.portionWeight,
                         quantity = quantity
                 )

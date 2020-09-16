@@ -51,6 +51,7 @@ class DishAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         dish = super().save_model(request, obj, form, change)
+        obj.save()
         categories = Category.objects.filter(dishes=dish)
         restaurant_menu = RestaurantMenu.objects.filter(categories__in=categories).first()
         obj.restaurant = str(restaurant_menu.restaurant.title)

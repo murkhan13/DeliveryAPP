@@ -230,6 +230,7 @@ class CartItem(models.Model):
     description     = models.CharField(("Описание блюда"),max_length = 200)
     portionWeight   = models.IntegerField(("Масса порции"))
     category        = models.ManyToManyField(Category, verbose_name="Категории")
+    restaurant      = models.CharField(max_length=200, verbose_name="Ресторан", blank=True, null=True)
     additives       = models.ManyToManyField(DishAdditive, verbose_name="Добавки")
     extra           = models.ManyToManyField(DishExtra, verbose_name="Дополнительно")
     quantity        = models.PositiveIntegerField(default=1)
