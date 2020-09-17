@@ -20,6 +20,16 @@ class CategoryAdmin(admin.ModelAdmin):
         DishInline,
     ]
 
+class CategoryInline(admin.TabularInline):
+    model = RestaurantMenu.categories.through
+
+
+class RestaurantMenuAdmin(admin.ModelAdmin):
+    exclude = ( 'categories', )
+    inlines = (CategoryInline,)
+
+    
+
 """class RestauranAdmin(admin.ModelAdmin):
 
     fields = (
@@ -64,6 +74,6 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Restaurant, RestaurantAdmin)
 
 
-admin.site.register(RestaurantMenu)
+admin.site.register(RestaurantMenu, RestaurantMenuAdmin)
 
 admin.site.register(Offer)
