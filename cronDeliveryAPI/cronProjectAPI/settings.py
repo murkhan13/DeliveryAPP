@@ -126,7 +126,7 @@ DATABASES = {
         'NAME': config("SQL_DATABASE"),# os.path.join(BASE_DIR, "db.sqlite3")),
         'USER' : config("SQL_USER"), #"user"),
         'PASSWORD' : config("SQL_PASSWORD"), #"password"),
-        'HOST' : '127.0.0.1', #config("SQL_HOST"), #"localhost"),
+        'HOST' : config("SQL_HOST"), #"localhost"),
         'PORT' : config("SQL_PORT"), #"5432"),
         }
 }
@@ -198,6 +198,5 @@ REST_KNOX = {
 FCM_DJANGO_SETTINGS = {
     "FCM_SERVER_KEY" "[AAAAL9hLaRs:APA91bEguNRPUIZGwUAS-0YIirqQqlZRYVsUyO4dWfr0zC2b-EgV57qrqFd_i16HsTTcOB-t6z8pfa4YElC-qfD-AzPKlzoSmlx_MH3yGOmGcRspSUlw9zyQZjEccGhzZF83BP4_vYnZ]"
 }'''
-
 
 ADMIN_PASSWORD = 'sha1$4e987$afbcf42e21bd417fb71db8c66b321e9fc33051de'

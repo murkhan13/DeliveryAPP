@@ -28,23 +28,7 @@ class RestaurantMenuAdmin(admin.ModelAdmin):
     exclude = ( 'categories', )
     inlines = (CategoryInline,)
 
-    
 
-"""class RestauranAdmin(admin.ModelAdmin):
-
-    fields = (
-        'title',
-        'logo',
-        'image',
-        'workTime',
-        'minOrder',
-        'freeOrder',
-        'address',
-        'delivery',
-        'maxDeliveryDist',
-        'info',
-        'rating'
-    )"""
 class RestaurantAdmin(admin.ModelAdmin):
 
     exclude = (
