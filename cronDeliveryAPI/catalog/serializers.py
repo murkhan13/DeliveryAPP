@@ -67,7 +67,7 @@ class DishDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dish
-        fields =  ('id', 'title', 'image', 'price',  'portionWeight','description', 'category', 'additives', 'extra')
+        fields =  ('id', 'title', 'image', 'price',  'portionWeight','description', 'category', 'restaurant', 'additives', 'extra')
 
     def get_image_url(self, obj):
         return obj.image.url
@@ -201,6 +201,7 @@ class CartDishSerializer(serializers.ModelSerializer):
             'description',
             'portionWeight',
             'category',
+            'restaurant',
             'additives',
             'extra',
         )

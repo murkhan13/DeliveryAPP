@@ -9,9 +9,10 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
-    command: sh -c "whoami && ls  && python3 manage.py runserver 0.0.0.0:8000 " #python3 manage.py runserver 0.0.0.0:8000
+    command: sh -c "whoami && ls  && python3 manage.py runserver 0.0.0.0:8000 "
     environment:
       - DEBUG=1
+      - ALLOWED_HOSTS=localhost, 127.0.0.1, 0.0.0.0
     env_file:
       - ./.env
   db:
