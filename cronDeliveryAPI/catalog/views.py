@@ -129,6 +129,8 @@ class GlobalSearchView(APIView):
                                 categories_qs.append(category)
                 final_list = []
                 restaurantmenu_qs = RestaurantMenu.objects.filter(categories__in=categories_qs).distinct()
+                restaurantmenu_qs = restaurantmenu_qs.filter(restaurant__worksFrom__lt=timezone.now().time()).filter(restaurant__worksTo__gt=timezone.now().time())
+                print('time:', timezone.now().time())
                 paginator = Paginator(restaurantmenu_qs, 10)
                 restaurantmenu_qs = paginator.page(page)
                 search_response_dict = {}
