@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django.template import loader
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import  status, generics
+from django.views.generic import TemplateView
 
 from knox.auth import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -139,8 +141,10 @@ class ValidateOtpAndAuthenticate(KnoxLoginView):
                             serializer.is_valid(raise_exception=True)
                             user = serializer.validated_data['user']
                             if device_token != False:
+                                print(device_token)
                                 try:
                                     cart = Cart.objects.get(device_token=device_token)
+                                    print(cart)
                                     if cart is not None:
                                         cart.user=user
                                         cart.save()
@@ -181,7 +185,7 @@ class ValidateOtpAndAuthenticate(KnoxLoginView):
                                     cart = Cart.objects.get(device_token=device_token)
                                     if cart is not None:
                                         cart.user = user
-                                        cart.save
+                                        cart.save()
                                 except:
                                     pass
                             # serializer = CreateUserSerializer(data=temp_data)

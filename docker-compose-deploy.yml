@@ -7,10 +7,13 @@ services:
       context: .
     # command: sh -c "uwsgi --socket :8000 --master --enable-threads --module cronProjectAPI.wsgi"
     volumes:
+      - ./cronDeliveryAPI:/app
       - static_data:/vol/web
     environment:
       # - SECRET_KEY = ps7(e&!!l(kbsmr$76qia@(zi%p=^w-r=(+()ex!33*pyd*8x^
       - ALLOWED_HOSTS=185.125.56.240 127.0.0.1 localhost
+    depends_on:
+      - db
 
   proxy:
     build:
