@@ -42,14 +42,17 @@ class RestaurantAdmin(admin.ModelAdmin):
 
 class DishAdmin(admin.ModelAdmin):
     inlines = [DishAdditiveInline, DishExtraInline]
-
+    '''
     def save_model(self, request, obj, form, change):
         dish = super().save_model(request, obj, form, change)
         obj.save()
-        categories = Category.objects.filter(dishes=dish)
-        restaurant_menu = RestaurantMenu.objects.filter(categories__in=categories).first()
+        print(dish)
+        category = Category.objects.filter(dishes=dish)
+        print(category)
+        restaurant_menu = RestaurantMenu.objects.filter(categories__in=category).first()
+        print(restaurant_menu)
         obj.restaurant = str(restaurant_menu.restaurant.title)
-        super().save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)'''
 
 
 admin.site.register(Dish, DishAdmin)
