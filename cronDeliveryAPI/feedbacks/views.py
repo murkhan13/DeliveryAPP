@@ -1,15 +1,14 @@
-
-# Create your views here.
-
-
 from rest_framework.generics import GenericAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.views import APIView
-from django.db.models import Prefetch
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
+from rest_framework.exceptions import ParseError
+# from rest_framework.parsers import FileUploadParser, MultiParser, FormParser
+
 from .serializers import *
 from .models import *
 from django.shortcuts import get_object_or_404
-from itertools import chain
-from django.db.models import Prefetch, Q, FilteredRelation
 from cronProjectAPI.settings import ALLOWED_HOSTS
 
 from knox.auth import TokenAuthentication
@@ -21,7 +20,18 @@ from catalog.models import Restaurant
 from orders.models import Order
 
 import json
-from rest_framework import filters
+
+
+class OrderFeedbacksView(APIView):
+    # parser_class = (FileUploadParser,)
+
+    def get(self, request, id, *args, **kwargs):
+        order = Order.objects.filter(pk=id)
+        order_feedback = OrderFeedback.objects.filter(order=order, user=self.request.user)
+
+    def post(self, request, id, *args, **kwargs):
+        file_serializer = OrderFeedbackImageSerializer
+
 
 
 

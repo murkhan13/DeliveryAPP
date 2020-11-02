@@ -9,7 +9,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ( 'name', 'phone',)
-    
+
     def create(self, validated_data):
         user = User.objects.create(**validated_data)
         return user
@@ -21,12 +21,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'phone', 'name')
-    
+
     def user_existing(self, user):
         user_exsts = User.objects.filter(phone__iexact=user.phone)
         if user_exsts.exists():
             user_exsts = True
-        else: 
+        else:
             user_exsts = False
         return user_exsts
 

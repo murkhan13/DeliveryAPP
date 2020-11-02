@@ -66,4 +66,4 @@ class OrderFeedbackImage(models.Model):
         blank=True,
         null=True
     )
-    image       = models.ImageField(("Картинка ресторана"),upload_to="feedbacks", default = 'not_found.jpg')
+    image       = models.FileField(("Картинка ресторана"),upload_to="feedbacks", default = 'not_found.jpg')

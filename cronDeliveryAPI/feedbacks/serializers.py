@@ -5,14 +5,6 @@ from accounts.models import User
 from .models import *
 
 
-
-class RestaurantFeedbackSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RestaurantFeedbackImage
-        fields = (
-            'image',
-        )
-
 class OrderFeedbackImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderFeedbackImage
@@ -34,7 +26,7 @@ class RestaurantFeedbackSerializer(serializers.ModelSerializer):
         )
 
 class OrderFeedbackSerializer(serializers.ModelSerializer):
-
+    images = OrderFeedbackImageSerializer(many=True, read_only=True)
     class Meta:
         model = Order
         fields = (
