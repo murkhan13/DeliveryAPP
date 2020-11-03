@@ -171,6 +171,7 @@ class RestaurantView(ListModelMixin, GenericAPIView):
         working = []
         closed = []
         for restaurant in Restaurant.objects.all():
+            print(restaurant.worksFrom, timezone.now().time(), restaurant.WorksTo)
             if restaurant.worksFrom < timezone.now().time() < restaurant.worksTo:
                 working.append(restaurant)
             else:
@@ -245,6 +246,7 @@ class MenuPageView(ListModelMixin, GenericAPIView):
 
         # customize the response data
         response = {"categories":categories_serializer.data, "restaurant": restaurant_serializer.data[-1]}
+        print('time:', datetime.now().time())
 
         # return custom representation of data
         return Response(response)
