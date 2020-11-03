@@ -171,7 +171,6 @@ class RestaurantView(ListModelMixin, GenericAPIView):
         working = []
         closed = []
         for restaurant in Restaurant.objects.all():
-            print(restaurant.worksFrom, timezone.now().time(), restaurant.WorksTo)
             if restaurant.worksFrom < timezone.now().time() < restaurant.worksTo:
                 working.append(restaurant)
             else:
