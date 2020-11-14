@@ -452,7 +452,7 @@ class CartItemAddView(APIView):
                 new_cart_item.save()
                 category = dish.category
                 for cat in category.values():
-                    obj = Category.objects.filter(name__iexact=cat["name"])
+                    obj = Category.objects.filter(name=cat["name"])
                     new_cart_item.category.add(obj)
 
                 if additives is not None:
