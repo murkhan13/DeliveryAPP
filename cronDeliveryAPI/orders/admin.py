@@ -45,14 +45,12 @@ class OrderItemInline(nested_admin.SortableHiddenMixin,
                     'quantity' ,
                    ]
     readonly_fields = (
-                        'order_dish',   
+                        'order_dish',
                         'quantity',
                       )"""
 
 
 class OrderAdmin(nested_admin.NestedModelAdmin):
-    
-    
     inlines =[
         CartItemInline,
     ]
@@ -65,14 +63,14 @@ class OrderAdmin(nested_admin.NestedModelAdmin):
         'address',
         'personsAmount',
         'orderStatus',
-        'created_at' 
+        'created_at'
     ]
     readonly_fields = [
-        'user', 
-        'phone', 
-        'total', 
+        'user',
+        'phone',
+        'total',
         'deliverTo',
-        'address', 
+        'address',
         'personsAmount',
         # 'order_items',
         'paymentMode',

@@ -1,20 +1,14 @@
 from __future__ import unicode_literals
-
-
-from django.shortcuts import render
-from django.db.models import FloatField
-from django.db.models import F
-from django.db.models import Sum
-
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
-
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
+from django.shortcuts import render
+from django.db.models import FloatField, F, Sum
+
 from knox.auth import TokenAuthentication
 
 from catalog.models import Cart, CartItem
-
 from .models import *
 from .serializers import *
 
@@ -254,7 +248,6 @@ class UserProfileView(APIView):
     Returns:
         [json object]: [json object of user model]
     """
-
     serializer_class = UserProfileSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)

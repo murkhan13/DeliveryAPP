@@ -87,31 +87,3 @@ class Order(models.Model):
 
     def __str__(self):
         return "%s заказал %s" %(self.user, self.created_at)
-
-"""
-class OrderItem(models.Model):
-    A model that contains data for an item in an order.
-    order           = models.ForeignKey(
-                        Order,
-                        related_name='order_items',
-                        on_delete=models.CASCADE
-                )
-    order_dish      = models.ForeignKey(
-                        CartItem,
-                        on_delete=models.CASCADE,
-                        verbose_name="Блюда",
-                        null=True,
-                        blank=True,
-                )
-    quantity        = models.PositiveIntegerField(("Количество"),null=True, blank=True)
-
-
-    class Meta:
-        verbose_name = "Заказанное блюдо"
-        verbose_name_plural = "Заказанные блюда"
-
-    def __str__(self):
-        return ''#"%s : %s" % (self.order_dish.title, self.quantity)
-
-    def __unicode__(self):
-        return '%s: %s' % (self.order_dish.title, self.quantity)"""

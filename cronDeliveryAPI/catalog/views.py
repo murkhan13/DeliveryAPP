@@ -1,26 +1,30 @@
+from datetime import datetime
+from itertools import chain
+import json
+
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView, RetrieveAPIView, ListAPIView
-from rest_framework.views import APIView
-from rest_framework.mixins import ListModelMixin
-from .serializers import *
-from .models import *
-from django.shortcuts import get_object_or_404
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from itertools import chain
-from django.db.models import Prefetch, Q, FilteredRelation
-from cronProjectAPI.settings import ALLOWED_HOSTS
-from django.contrib.auth.models import AnonymousUser
-from datetime import datetime
-
-from knox.auth import TokenAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
-from django.shortcuts import get_object_or_404
-
-import json
-from django_filters import rest_framework as rest_filters, NumberFilter, CharFilter
+from rest_framework.views import APIView
+from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
+
+from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Prefetch, Q, FilteredRelation
+
+from django.contrib.auth.models import AnonymousUser
+from django.shortcuts import get_object_or_404
+from django_filters import rest_framework as rest_filters, NumberFilter, CharFilter
+
+from cronProjectAPI.settings import ALLOWED_HOSTS
+from .serializers import *
+from .models import *
+from knox.auth import TokenAuthentication
+
+
 
 
 class DishDetailView(RetrieveAPIView):
@@ -464,6 +468,7 @@ class CartItemAddView(APIView):
             except  Exception as e:
                 return Response({
                     "status": False,
+                    "error": e
                 })
 
 class CartItemEditView(APIView):
