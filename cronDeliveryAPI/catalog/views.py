@@ -466,7 +466,7 @@ class CartItemAddView(APIView):
                         "status": True
                 })
             except  Exception as e:
-                print(e)
+                print("error:", e)
                 return Response({
                     "status": False
                 })
