@@ -16,7 +16,6 @@ from .models import *
 from catalog.models import Restaurant
 from orders.models import Order
 
-get
 class OrderFeedbacksView(APIView):
     # parser_class = (FileUploadParser,)
 
