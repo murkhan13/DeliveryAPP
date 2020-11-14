@@ -316,9 +316,12 @@ class CartItemAddView(APIView):
                 'detail': "Ошибка при добавлении в корзину"
             })
         try:
-            additives = DishAdditive.objects.get(
-                id=request.data['additives_id']
-            )
+            if request.data['additives_id'] != 0:
+                additives = DishAdditive.objects.get(
+                    id=request.data['additives_id']
+                )
+            else:
+                additives = None
         except:
             additives = None
         try:
@@ -459,8 +462,9 @@ class CartItemAddView(APIView):
                     new_cart_item.additives.add(additives)
                 if extra_list is not None:
                     for extra in extra_list:
-                        obj = DishExtra.objects.get(pk=extra)
-                        new_cart_item.extra.add(obj)
+                        if extra != 0:
+                            obj = DishExtra.objects.get(pk=extra)
+                            new_cart_item.extra.add(obj)
                 return Response({
                         "status": True
                 })
