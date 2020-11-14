@@ -81,7 +81,6 @@ class OrderView(APIView):
             personsAmount=request.data['personsAmount'],
             paymentMode=request.data['paymentMode']
             )
-
         order.save()
 
         for cart_item in cart.items.all():

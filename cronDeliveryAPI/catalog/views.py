@@ -451,13 +451,12 @@ class CartItemAddView(APIView):
                 )
                 new_cart_item.save()
                 category = dish.category
-                for cat in category.values():
-                    obj = Category.objects.filter(name=cat["name"])
-                    new_cart_item.category.add(obj)
 
+                for cat in dish.category.all():#.values():
+                    #obj = Category.objects.filter(name=cat["name"])
+                    new_cart_item.category.add(cat)
                 if additives is not None:
                     new_cart_item.additives.add(additives)
-
                 if extra_list is not None:
                     for extra in extra_list:
                         obj = DishExtra.objects.get(pk=extra)
