@@ -22,6 +22,8 @@ class OrderFeedbacksView(APIView):
     def get(self, request, id, *args, **kwargs):
         order = Order.objects.filter(pk=self.kwargs['order_id'])
         order_feedback = OrderFeedback.objects.filter(order=order, user=self.request.user)
+        serializer = OrderFeedbackSerializer(order_feedback, many=True, context={'request':request})
+        return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         #file_serializer = OrderFeedbackImageSerializer
@@ -29,11 +31,8 @@ class OrderFeedbacksView(APIView):
         if 'files' in request.data:
             try:
                 files = request.FILES.getlist('files')
-                print(files)
             except KeyError:
                 raise ParseError('Файлы при запросе были переданы неправильно.')
-        else:
-            print(files)
         feedback = OrderFeedback.objects.create(
             user=self.request.user,
             order=Order.objects.get(pk=self.kwargs['order_id']),
@@ -43,10 +42,8 @@ class OrderFeedbacksView(APIView):
             cons=request.data['cons']
         )
         feedback.save()
-        print(feedback)
         if files != None:
             for img in files:
-                print('img', img)
                 OrderFeedbackImage.objects.create(
                     feedback=feedback,
                     image=img
@@ -54,6 +51,26 @@ class OrderFeedbacksView(APIView):
             return Response({
                 'status': True,
                 'detail': 'Отзыв успешно добавлен. Оставайтесь с нами.'
+            })
+
+    def delete(self, request):
+        try:
+            feedback_qs = OrderFeedback.objects.filter(pk=request.data['feedback'])
+            if feedback_qs.exists():
+                feedback_qs.delete()
+                return Response({
+                    "status": True,
+                    "detail": "Отзыв удалён"
+                    })
+            else:
+                return Response({
+                    "status": False,
+                    "detail": "Отзыв не найден"
+                })
+        except:
+            return Response({
+                "status": False,
+                "detail": "Ошибка при удалении отзыва"
             })
 
 
@@ -70,7 +87,7 @@ class RestaurantFeedbacksView(APIView):
 
     def get(self, request, *args, **kwargs):
         restaurant = Restaurant.objects.get(title=self.request.GET['restaurant'])
-        feedbacks_qs = RestaurantFeedback.objects.filter(restaurant=restaurant)
+        feedbacks_qs = RestaurantFeedback.objects.filter(restaurant=restaurant, user=self.request.user)
 
         serializer = RestaurantFeedbackSerializer(feedbacks_qs, many=True, context = {"request": request})
         return Response(serializer.data)
@@ -84,42 +101,50 @@ class RestaurantFeedbacksView(APIView):
                 raise ParseError('Файлы при запросе были переданы неправильно.')
         restaurant = Restaurant.objects.get(pk=self.kwargs['restaurant_id'])
         point = request.data['overallPoint']
-        try:
-            feedback = RestaurantFeedback.objects.create(
-                user=self.request.user,
-                restaurant=restaurant,
-                name=request.data['name'],
-                overallPoint=point,
-                pros=request.data['pros'],
-                cons=request.data['cons']
-            )
-            feedback.save()
-        except:
+        orders = Order.objects.filter(restaurant__icontains=restaurant.title, user=user)
+        if len(orders) > 0:
+            try:
+                feedback = RestaurantFeedback.objects.create(
+                    user=self.request.user,
+                    restaurant=restaurant,
+                    name=request.data['name'],
+                    overallPoint=point,
+                    pros=request.data['pros'],
+                    cons=request.data['cons']
+                )
+                feedback.save()
+            except:
+                return Response({
+                    'status': False,
+                    'detail': 'Ошибка при добавление отзыва'
+                })
+            if files != None:
+                for img in files:
+                    print('img', img)
+                    RestaurantFeedbackImage.objects.create(
+                        feedback=feedback,
+                        image=img
+                    )
+                return Response({
+                    'status': True,
+                    'detail': 'Отзыв успешно добавлен. Оставайтесь с нами.'
+                })
+            restaurant.feedbacksAmount += 1
+            restaurant.sumOfPoints += point
+            restaurant.save()
+            if restaurant.feedbacksAmount > 0:
+                restaurant.rating = restaurant.sumOfPoints / restaurant.feedbacksAmount
+                restaurant.save()
+            return Response({
+                "status": True,
+                "detail": "Отзыв успешно добавлен"
+            })
+        else:
             return Response({
                 'status': False,
-                'detail': 'Ошибка при добавление отзыва'
+                'detail': 'Для оставления отзыва нужно совешить хотя бы один заказа в данном ресторане'
             })
-        if files != None:
-            for img in files:
-                print('img', img)
-                RestaurantFeedbackImage.objects.create(
-                    feedback=feedback,
-                    image=img
-                )
-            return Response({
-                'status': True,
-                'detail': 'Отзыв успешно добавлен. Оставайтесь с нами.'
-            })
-        restaurant.feedbacksAmount += 1
-        restaurant.sumOfPoints += point
-        restaurant.save()
-        if restaurant.feedbacksAmount > 0:
-            restaurant.rating = restaurant.sumOfPoints / restaurant.feedbacksAmount
-            restaurant.save()
-        return Response({
-            "status": True,
-            "detail": "Отзыв успешно добавлен"
-        })
+
 
     def delete(self, request):
         try:
