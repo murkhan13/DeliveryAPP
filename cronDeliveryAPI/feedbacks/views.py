@@ -19,7 +19,7 @@ from orders.models import Order
 class OrderFeedbacksView(APIView):
     # parser_class = (FileUploadParser,)
 
-    def get(self, request, id, *args, **kwargs):
+    def get(self, request,  *args, **kwargs):
         order = Order.objects.filter(pk=self.kwargs['order_id'])
         order_feedback = OrderFeedback.objects.filter(order=order, user=self.request.user)
         serializer = OrderFeedbackSerializer(order_feedback, many=True, context={'request':request})
