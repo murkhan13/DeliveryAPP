@@ -1,4 +1,3 @@
-from datetime import datetime
 from itertools import chain
 import json
 
@@ -12,6 +11,7 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
 
 from django.shortcuts import get_object_or_404
+from django.utils import timezone as djangotime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Prefetch, Q, FilteredRelation
 
@@ -175,7 +175,7 @@ class RestaurantView(ListModelMixin, GenericAPIView):
         working = []
         closed = []
         for restaurant in Restaurant.objects.all():
-            if restaurant.worksFrom < timezone.now().time() < restaurant.worksTo:
+            if restaurant.worksFrom < djangotime.now().time() < restaurant.worksTo:
                 working.append(restaurant)
             else:
                 closed.append(restaurant)
@@ -183,7 +183,7 @@ class RestaurantView(ListModelMixin, GenericAPIView):
         # closed      = Restaurant.objects.filter(worksFrom__gt=timezone.now().time(), worksTo__lt=timezone.now().time())
         openSer     = RestaurantDetailSerializer(working, many=True, context={"request":request})
         closedSer   = RestaurantDetailSerializer(closed, many=True, context={"request": request})
-        print('time: ', timezone.now().time())
+        print('time: ', djangotime.now().time())
 
         #return self.list(request, *args, **kwargs)
         return Response({
