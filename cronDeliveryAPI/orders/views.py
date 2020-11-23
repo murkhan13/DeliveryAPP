@@ -1,3 +1,5 @@
+import os
+
 from __future__ import unicode_literals
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView
@@ -11,6 +13,9 @@ from knox.auth import TokenAuthentication
 from catalog.models import Cart, CartItem
 from .models import *
 from .serializers import *
+
+TELEGRAM_URL = "https://api.telegram.org/bot"
+TELEGRAM_BOT_TOKEN = os.getenv("TUTORIAL_BOT_TOKEN", "error_token")
 
 
 
@@ -61,7 +66,6 @@ class OrderView(APIView):
         except :
             raise serializers.ValidationError(
                 'Пользователь не найден'
-        )
 
         if 'deliverTo' in request.data:
             deliverTo = request.data['deliverTo']
@@ -82,9 +86,16 @@ class OrderView(APIView):
             paymentMode=request.data['paymentMode']
             )
         order.save()
+        url = '{0}{1}/sendMessage'.format(TELEGRAM_URL, TELEGRAM_BOT_TOKEN)
+        text =''
+        data = {"chat_id": '-463655212'}
 
         for cart_item in cart.items.all():
             cart_item.order = order
+            dish_text = str(cart_item.title) + str(cart_item.quantity)
+            if len(cart_item.additives.all()) > 0:
+                
+
             cart_item.save()
 
         """
