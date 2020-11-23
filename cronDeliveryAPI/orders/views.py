@@ -1,6 +1,7 @@
+from __future__ import unicode_literals
+
 import os
 
-from __future__ import unicode_literals
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
