@@ -80,6 +80,7 @@ class OrderView(APIView):
             phone=request.data['phone'],
             total=request.data['total'],
             deliverTo=deliverTo,
+            restaurant=restaurant,
             address = request.data['address'],
             comment = request.data['comment'],
             personsAmount=request.data['personsAmount'],
