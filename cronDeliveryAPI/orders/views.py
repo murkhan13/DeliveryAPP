@@ -65,8 +65,7 @@ class OrderView(APIView):
             cart = Cart.objects.get(user=purchaser)
         except :
             raise serializers.ValidationError(
-                'Пользователь не найден'
-
+                'Пользователь не найден')
         if 'deliverTo' in request.data:
             deliverTo = request.data['deliverTo']
         else:
@@ -94,8 +93,7 @@ class OrderView(APIView):
             cart_item.order = order
             dish_text = str(cart_item.title) + str(cart_item.quantity)
             if len(cart_item.additives.all()) > 0:
-                
-
+                pass
             cart_item.save()
 
         """
