@@ -35,15 +35,15 @@ DEBUG = int(os.environ.get('DEBUG', 1) )
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 
-ALLOWED_HOSTS = ALLOWED_HOSTS.split(" ")
+# ALLOWED_HOSTS = ALLOWED_HOSTS.split(" ")
 
-# ALLOWED_HOSTS = [
-#     'mein-r1an-frau.herokuapp.com',
-#     'delivery-api-cron.herokuapp.com',
-#     '127.0.0.1',
-#     '0.0.0.0'
-#     'localhost'
-# ]
+ALLOWED_HOSTS = [
+    'crondostav.ru'
+    'delivery-api-cron.herokuapp.com',
+    '127.0.0.1',
+    '0.0.0.0'
+    'localhost'
+]
 
 # Application definition
 

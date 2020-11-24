@@ -24,14 +24,11 @@ from knox.auth import TokenAuthentication
 import requests
 
 def send_sms(phone, key):
-    print(phone)
     login = 'CronApp'
     password = 'croncron'
     message = "CronDostavka - код подтверждения:"
     message += str(key) # CronDostavka:key
     link = "http://smsc.ru/sys/send.php?login=%s&psw=%s&phones=%s&mes=%s" % (login, password, phone, message)
-    print(link)
-
     requests.post(link)
 
 def send_otp(phone):
