@@ -439,7 +439,7 @@ class CartItemAddView(APIView):
                     break
 
         if flag == False:
-            img_url = 'http://' + ALLOWED_HOSTS[0] + ":8080" + dish.image.url
+            img_url = 'http://' + ALLOWED_HOSTS[0] + dish.image.url
             try:
                 new_cart_item = CartItem.objects.create(
                         cart=cart,
