@@ -184,6 +184,7 @@ MEDIA_ROOT = '/vol/web/media'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
+TG_BOT_TOKEN = config('TG_BOT_TOKEN', "error_token")
 
 AUTH_USER_MODEL = 'accounts.User'
 

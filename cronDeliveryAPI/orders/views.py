@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import os
+import requests
 
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView
@@ -8,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
 from django.shortcuts import render
 from django.db.models import FloatField, F, Sum
+from cronProjectAPI.settings import TG_BOT_TOKEN
 
 from knox.auth import TokenAuthentication
 
@@ -16,7 +18,7 @@ from .models import *
 from .serializers import *
 
 TELEGRAM_URL = "https://api.telegram.org/bot"
-TELEGRAM_BOT_TOKEN = os.getenv("TUTORIAL_BOT_TOKEN", "error_token")
+# TELEGRAM_BOT_TOKEN = os.getenv("TG_BOT_TOKEN", "error_token")
 
 
 
@@ -61,42 +63,58 @@ class OrderView(APIView):
 
     def post(self, request, pk=None):
         try:
-            purchaser_id = self.request.user.id
-            purchaser = User.objects.get(id=purchaser_id)
-            cart = Cart.objects.get(user=purchaser)
+            cart        = Cart.objects.get(user=self.request.user)
         except :
             raise serializers.ValidationError(
                 'Пользователь не найден')
         if 'deliverTo' in request.data:
-            deliverTo = request.data['deliverTo']
+            deliverTo   = request.data['deliverTo']
         else:
-            deliverTo = 'Как можно быстрее'
+            deliverTo   = 'Как можно быстрее'
         if 'restaurant' in request.data:
-            restaurant = request.data['restaurant']
+            restaurant  = request.data['restaurant']
         else:
-            restaurant = None
+            restaurant  = None
+        phone           =request.data['phone']
+        total           =request.data['total']
+        address         = request.data['address']
+        comment         = request.data['comment']
+        personsAmount   =request.data['personsAmount']
+        paymentMode     =request.data['paymentMode']
         order = Order(
-            user=purchaser,
-            phone=request.data['phone'],
-            total=request.data['total'],
+            user=self.request.user,
+            phone=phone,
+            total=total,
             deliverTo=deliverTo,
             restaurant=restaurant,
-            address = request.data['address'],
-            comment = request.data['comment'],
+            address = address,
+            comment = comment,
             personsAmount=request.data['personsAmount'],
             paymentMode=request.data['paymentMode']
             )
         order.save()
-        url = '{0}{1}/sendMessage'.format(TELEGRAM_URL, TELEGRAM_BOT_TOKEN)
-        text =''
-        data = {"chat_id": '-463655212'}
+        url = '{0}{1}/sendMessage'.format(TELEGRAM_URL, TG_BOT_TOKEN)
+        text ='Новый заказ: \n'
 
         for cart_item in cart.items.all():
             cart_item.order = order
-            dish_text = str(cart_item.title) + str(cart_item.quantity)
+            text += str(cart_item.title) + '\n Количество: ' + str(cart_item.quantity)
             if len(cart_item.additives.all()) > 0:
-                pass
+                text += '\n Добавка: '
+                for add in cart_item.additives.all():
+                    text += add.name
+            if len(cart_item.extra.all()) > 0:
+                text += '\n Дополнительно: '
+                for ext in cart_item.extra.all():
+                    text += ext.name
             cart_item.save()
+        text += '\n Адрес доставки: {0} \n Комментарий: {1}'.format(address, comment)
+        text += '\n Ресторан: {0} количество персон: {1}, способ оплаты: {2}, доставить к: {3}'.format(restaurant, personsAmount, paymentMode, deliverTo)
+        text += '\n Телефон: {0}, Итог: {1}руб. \n'.format(phone, total)
+        print(url)
+        print(text)
+        data = {"chat_id": '-463655212',  "text": text}
+        requests.post(url, data)
 
         """
         order_items = []

@@ -249,7 +249,7 @@ class MenuPageView(ListModelMixin, GenericAPIView):
 
         # customize the response data
         response = {"categories":categories_serializer.data, "restaurant": restaurant_serializer.data[-1]}
-        print('time:', datetime.now().time())
+        # print('time:', datetime.now().time())
 
         # return custom representation of data
         return Response(response)
