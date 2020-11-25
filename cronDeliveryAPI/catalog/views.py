@@ -267,8 +267,10 @@ class CartItemAddView(APIView):
         # Cart.objects.all().delete()
         # CartItem.objects.all().delete()
         if request.user.is_authenticated:
+            print("USER AUTH-D: ", request.user)
             try:
                 cart = Cart.objects.get(user=self.request.user)
+                print(Cart.objects.filter(user=self.request.user))
             except:
                 cart = Cart.objects.create(user=self.request.user)
                 cart.save()
@@ -289,7 +291,7 @@ class CartItemAddView(APIView):
     def post(self, request, pk=None):
         # if user logged in get cart of authorized customer else get cart of unauthorized customer
         if request.user.is_authenticated:
-            print(len(Cart.objects.filter(user=self.request.user)))
+            # print(len(Cart.objects.filter(user=self.request.user)))
             try:
                 cart = Cart.objects.get(user=self.request.user)
             except:

@@ -139,17 +139,19 @@ class ValidateOtpAndAuthenticate(KnoxLoginView):
                             user = serializer.validated_data['user']
                             if device_token != False:
                                 # print(device_token)
-                                try:
-                                    cart = Cart.objects.get(device_token=device_token)
-                                    old_cart = Cart.objects.filter(user=user)
-                                    if old_cart.exists():
-                                        old_cart.delete()
-                                    # print(cart)
-                                    if cart is not None:
-                                        cart.user=user
-                                        cart.save()
-                                except:
+                                if Cart.objects.filter(device_token=device_token, user=user).exists():
                                     pass
+                                else:
+                                    try:
+                                        cart = Cart.objects.get(device_token=device_token)
+                                        if cart is not None:
+                                            cart.user=user
+                                            cart.save()
+                                    except:
+                                        cart = None
+                                    if cart is not None:
+                                        old_cart = Cart.objects.filter(user=user).delete()
+                                        # print(cart)
                             login(request,user)
                             old.delete()
                             return super(ValidateOtpAndAuthenticate, self).post(request, format=None)
