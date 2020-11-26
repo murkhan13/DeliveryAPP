@@ -125,36 +125,43 @@ class GlobalSearchView(APIView):
                     Q(title__icontains=search_term) |
                     Q(category__name__icontains=search_term)
                 )
-                categories_qs = []
-                for category in Category.objects.all():
-                    for dish in dishes:
-                        if category in dish.category.all():
-                            if category not in categories_qs:
-                                categories_qs.append(category)
-                final_list = []
-                restaurantmenu_qs = RestaurantMenu.objects.filter(categories__in=categories_qs).distinct()
-                restaurantmenu_qs = restaurantmenu_qs.filter(restaurant__worksFrom__lt=timezone.now().time()).filter(restaurant__worksTo__gt=timezone.now().time())
-                print('time:', timezone.now().time())
-                paginator = Paginator(restaurantmenu_qs, 10)
-                restaurantmenu_qs = paginator.page(page)
-                search_response_dict = {}
-                pagination_dict = {"param": "page", "count": paginator.num_pages, "current": int(page), "rows": 10}
-                for restaurantmenu in restaurantmenu_qs:
-                    categorees = restaurantmenu.categories.all()
-                    rest_dict = {}
-                    restaurant_qs = Restaurant.objects.filter(title=restaurantmenu.restaurant.title)
-                    restaurant_dishes = Dish.objects.filter(title__icontains=search_term, category__in=categorees)
-                    rest_dict['restaurant'] = RestaurantDetailSerializer(restaurant_qs, many=True, context={'request':request}).data[0]
-                    rest_dict['dishes'] = DishDetailSerializer(restaurant_dishes, many=True, context={'request':request}).data
-                    final_list.append(rest_dict)
-                search_response_dict["search_response"] = final_list
-                if len(final_list) > 0 :
-                    search_response_dict['pagination'] = pagination_dict
-                else:
+                if len(dishes) == 0:
                     return Response({
-                        "detail": "По данному запросу ничего не было найдено."
+                        'status': False,
+                        'detail': "По данному запросу ничего не было найдено."
                     })
-                return Response(search_response_dict)
+                else:
+                    categories_qs = []
+                    for category in Category.objects.all():
+                        for dish in dishes:
+                            if category in dish.category.all():
+                                if category not in categories_qs:
+                                    categories_qs.append(category)
+                    final_list = []
+                    restaurantmenu_qs = RestaurantMenu.objects.filter(categories__in=categories_qs).distinct()
+                    restaurantmenu_qs = restaurantmenu_qs.filter(restaurant__worksFrom__lt=timezone.now().time()).filter(restaurant__worksTo__gt=timezone.now().time())
+                    print('time:', timezone.now().time())
+                    paginator = Paginator(restaurantmenu_qs, 10)
+                    restaurantmenu_qs = paginator.page(page)
+                    search_response_dict = {}
+                    pagination_dict = {"param": "page", "count": paginator.num_pages, "current": int(page), "rows": 10}
+                    for restaurantmenu in restaurantmenu_qs:
+                        categorees = restaurantmenu.categories.all()
+                        rest_dict = {}
+                        restaurant_qs = Restaurant.objects.filter(title=restaurantmenu.restaurant.title)
+                        restaurant_dishes = Dish.objects.filter(title__icontains=search_term, category__in=categorees)
+                        rest_dict['restaurant'] = RestaurantDetailSerializer(restaurant_qs, many=True, context={'request':request}).data[0]
+                        rest_dict['dishes'] = DishDetailSerializer(restaurant_dishes, many=True, context={'request':request}).data
+                        final_list.append(rest_dict)
+                    search_response_dict["search_response"] = final_list
+                    if len(final_list) > 0 :
+                        search_response_dict['pagination'] = pagination_dict
+                    else:
+                        return Response({
+                            'status': False,
+                            'detail': "По данному запросу ничего не было найдено."
+                        })
+                    return Response(search_response_dict)
             else:
                 return Response({
                     'status': False,
