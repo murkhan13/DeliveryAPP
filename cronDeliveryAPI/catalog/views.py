@@ -531,11 +531,9 @@ class CartItemEditView(APIView):
             try:
                 cartitem.quantity = quantity
                 cartitem.save()
-
                 if additives is not None:
                     cartitem.additives.clear()
                     cartitem.additives.add(additives)
-
                 if extra_list is not None:
                     cartitem.extra.clear()
                     for extra in extra_list:
