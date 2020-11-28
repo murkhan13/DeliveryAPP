@@ -58,6 +58,7 @@ class DishAdmin(admin.ModelAdmin):
 admin.site.register(Dish, DishAdmin)
 
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(SearchingCategory)
 admin.site.register(Restaurant, RestaurantAdmin)
 
 
