@@ -49,7 +49,8 @@ class SearchingCategory(models.Model):
         return obj.name
 
     class Meta:
-        verbose_name = "Категория для поиска"
+        verbose_name = "Категории для поиска"
+        verbose_name_plural = "Категории для поиска"
 
 
 
