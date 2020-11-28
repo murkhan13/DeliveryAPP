@@ -83,6 +83,23 @@ class SearchInRestaurantView(ListAPIView):
             })
 
 
+class SearchingCategoriesView(APIView):
+    """
+    Class Based View that handles parsing a searching categories
+
+    Args:
+        APIView ([class]): [view class from rest framework]
+
+    Returns:
+        [json object]: [json object of searching categories]
+    """
+
+    def get(self, request, *args, **kwargs):
+        searching_categories = SearchingCategory.objects.all()
+        serializer = SearchingCategoriesSerializer(searching_categories, many=True, context={'request': request})
+
+        return Response(serializer.data)
+
 class GlobalSearchView(APIView):
     """
     Class Based View that handles a searching through all restaurants logic
@@ -94,7 +111,6 @@ class GlobalSearchView(APIView):
         [json object]: [json object of searched queryset]
     """
     permission_classes = [AllowAny, ]
-
 
     def get(self, request, *args, **kwargs):
         if 'search' in self.request.GET:

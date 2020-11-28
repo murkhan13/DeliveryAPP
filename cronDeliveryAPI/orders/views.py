@@ -141,25 +141,27 @@ class RepeatOrderView(APIView):
     def post(self, request,*args,**kwargs):
         try:
             order = Order.objects.get(pk=request.data['order_id'], user=self.request.user)
+            cart = Order.objects.get(user=self.request.user)
         except Order.DoesNotExist:
             return Response({
                 "status": False,
                 "detail": "Такого заказа не существует"
             })
-        repeated_order = Order.objects.create(
-            user=self.request.user,
-            phone=order.phone,
-            total=order.total,
-            deliverTo=order.deliverTo,
-            address = order.address,
-            comment = order.comment,
-            personsAmount=order.personsAmount,
-            paymentMode=order.paymentMode
-        )
+        # repeated_order = Order.objects.create(
+        #     user=self.request.user,
+        #     phone=order.phone,
+        #     total=order.total,
+        #     deliverTo=order.deliverTo,
+        #     address = order.address,
+        #     comment = order.comment,
+        #     personsAmount=order.personsAmount,
+        #     paymentMode=order.paymentMode
+        # )
+        cart.items.clear()
         for order_item in order.order_items.all():
             order_item.pk = None
             order_item.save()
-            order_item.order = repeated_order
+            order_item.cart = cart
             order_item.save()
 
 

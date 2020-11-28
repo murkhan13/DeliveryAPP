@@ -60,6 +60,14 @@ class CategoriesSerializer(serializers.ModelSerializer):
         fields = ('id','name',)
 
 
+class SearchingCategoriesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SearchingCategory
+        fields = ('id', 'name', 'image')
+
+
+
 class DishDetailSerializer(serializers.ModelSerializer):
     category = CategoriesSerializer(many=True, read_only=True)
     additives = DishAdditivesSerializer(many=True, read_only=True)
