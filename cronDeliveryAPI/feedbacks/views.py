@@ -33,25 +33,37 @@ class OrderFeedbacksView(APIView):
                 files = request.FILES.getlist('files', None)
             except KeyError:
                 raise ParseError('Файлы при запросе были переданы неправильно.')
-        feedback = OrderFeedback.objects.create(
-            user=self.request.user,
-            order=Order.objects.get(pk=self.kwargs['order_id']),
-            name=request.data['name'],
-            overallPoint=request.data['overallPoint'],
-            pros=request.data['pros'],
-            cons=request.data['cons']
-        )
-        feedback.save()
-        if files != None:
-            for img in files:
-                OrderFeedbackImage.objects.create(
-                    feedback=feedback,
-                    image=img
-                )
+        try:
+            feedback = OrderFeedback.objects.create(
+                user=self.request.user,
+                order=Order.objects.get(pk=self.kwargs['order_id']),
+                name=request.data['name'],
+                overallPoint=request.data['overallPoint'],
+                pros=request.data['pros'],
+                cons=request.data['cons']
+            )
+            feedback.save()
+            if files != None:
+                for img in files:
+                    OrderFeedbackImage.objects.create(
+                        feedback=feedback,
+                        image=img
+                    )
+                return Response({
+                    'status': True,
+                    'detail': 'Отзыв успешно добавлен. Оставайтесь с нами.'
+                })
+            else:
+                return Response({
+                    'status': True,
+                    'detail': 'Отзыв успешно добавлен. Оставайтесь с нами.'
+                })
+        except:
             return Response({
-                'status': True,
-                'detail': 'Отзыв успешно добавлен. Оставайтесь с нами.'
+                    'status': False,
+                    'detail': 'Возникла ошибка при создании отзыва.'
             })
+
 
     def delete(self, request):
         try:
@@ -113,36 +125,31 @@ class RestaurantFeedbacksView(APIView):
                     cons=request.data['cons']
                 )
                 feedback.save()
+                if files != None:
+                    for img in files:
+                        RestaurantFeedbackImage.objects.create(
+                            feedback=feedback,
+                            image=img
+                        )
+                restaurant.feedbacksAmount += 1
+                restaurant.sumOfPoints += point
+                restaurant.save()
+                if restaurant.feedbacksAmount > 0:
+                    restaurant.rating = restaurant.sumOfPoints / restaurant.feedbacksAmount
+                    restaurant.save()
+                return Response({
+                    'status': True,
+                    'detail': 'Отзыв успешно добавлен. Оставайтесь с нами.'
+                })
             except:
                 return Response({
                     'status': False,
                     'detail': 'Ошибка при добавление отзыва'
                 })
-            if files != None:
-                for img in files:
-                    print('img', img)
-                    RestaurantFeedbackImage.objects.create(
-                        feedback=feedback,
-                        image=img
-                    )
-                return Response({
-                    'status': True,
-                    'detail': 'Отзыв успешно добавлен. Оставайтесь с нами.'
-                })
-            restaurant.feedbacksAmount += 1
-            restaurant.sumOfPoints += point
-            restaurant.save()
-            if restaurant.feedbacksAmount > 0:
-                restaurant.rating = restaurant.sumOfPoints / restaurant.feedbacksAmount
-                restaurant.save()
-            return Response({
-                "status": True,
-                "detail": "Отзыв успешно добавлен"
-            })
         else:
             return Response({
                 'status': False,
-                'detail': 'Для оставления отзыва нужно совешить хотя бы один заказа в данном ресторане'
+                'detail': 'Для оставления отзыва нужно совершить хотя бы один заказ в данном ресторане'
             })
 
 
