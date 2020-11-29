@@ -66,7 +66,7 @@ class Order(models.Model):
     phone_regex     = RegexValidator(regex=r'^\+?1?\d{11,25}$',
                         message="Номер телефона должен быть в формате: '+999999999'.Разрешено до 20 символов.")
     phone           = models.CharField(("Номер телефона"), validators = [phone_regex], max_length=25)
-    total           = models.DecimalField(("Итоговая сумма"), max_digits=8, decimal_places=2, null=True, blank=True)
+    total           = models.DecimalField(("Итоговая сумма"), max_digits=8, decimal_places=0, null=True, blank=True)
     deliverTo       = models.CharField(("Доставить к"), max_length=255)
 
     # order_items     = models.ManyToManyField(CartItem, verbose_name="Заказанные блюда")

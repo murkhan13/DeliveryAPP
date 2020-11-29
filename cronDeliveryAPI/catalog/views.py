@@ -97,7 +97,6 @@ class SearchingCategoriesView(APIView):
     def get(self, request, *args, **kwargs):
         searching_categories = SearchingCategory.objects.all()
         serializer = SearchingCategoriesSerializer(searching_categories, many=True, context={'request': request})
-
         return Response(serializer.data)
 
 class GlobalSearchView(APIView):
