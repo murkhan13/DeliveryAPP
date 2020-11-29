@@ -30,7 +30,7 @@ class OrderFeedbacksView(APIView):
         files = None
         if 'files' in request.data:
             try:
-                files = request.FILES.getlist('files')
+                files = request.FILES.getlist('files', None)
             except KeyError:
                 raise ParseError('Файлы при запросе были переданы неправильно.')
         feedback = OrderFeedback.objects.create(
@@ -96,7 +96,7 @@ class RestaurantFeedbacksView(APIView):
         files = None
         if 'files' in request.data:
             try:
-                files = request.FILES.getlist('files')
+                files = request.FILES.getlist('files', None)
             except KeyError:
                 raise ParseError('Файлы при запросе были переданы неправильно.')
         restaurant = Restaurant.objects.get(pk=self.kwargs['restaurant_id'])
