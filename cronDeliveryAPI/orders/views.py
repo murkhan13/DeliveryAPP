@@ -159,18 +159,16 @@ class RepeatOrderView(APIView):
         # )
         try:
             cart.items.clear()
-            print(cart.items.all())
-            for order_item in order.order_items.all():
-                print(order_item)
-                order_item.pk = None
-                order_item.save()
-                order_item.cart = cart
-                print(order_item)
-                order_item.save()
-                return Response({
-                    'status': True,
-                    'detail': 'Все позиции из данного заказа добавлены в корзину'
-                })
+            for item in order.order_items.all():
+                item.pk = None
+                item.save()
+                item.order=None
+                item.cart = cart
+                item.save()
+            return Response({
+                'status': True,
+                'detail': 'Все позиции из данного заказа добавлены в корзину'
+            })
         except:
             return Response({
                 'status': False,
