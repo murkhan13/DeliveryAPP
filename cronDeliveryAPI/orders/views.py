@@ -141,7 +141,7 @@ class RepeatOrderView(APIView):
     def post(self, request,*args,**kwargs):
         try:
             order = Order.objects.get(pk=request.data['order_id'], user=self.request.user)
-            cart = Order.objects.get(user=self.request.user)
+            cart = Cart.objects.get(user=self.request.user)
         except Order.DoesNotExist:
             return Response({
                 "status": False,
@@ -157,12 +157,25 @@ class RepeatOrderView(APIView):
         #     personsAmount=order.personsAmount,
         #     paymentMode=order.paymentMode
         # )
-        cart.items.clear()
-        for order_item in order.order_items.all():
-            order_item.pk = None
-            order_item.save()
-            order_item.cart = cart
-            order_item.save()
+        try:
+            cart.items.clear()
+            print(cart.items.all())
+            for order_item in order.order_items.all():
+                print(order_item)
+                order_item.pk = None
+                order_item.save()
+                order_item.cart = cart
+                print(order_item)
+                order_item.save()
+                return Response({
+                    'status': True,
+                    'detail': 'Все позиции из данного заказа добавлены в корзину'
+                })
+        except:
+            return Response({
+                'status': False,
+                'detail': 'Ошибка при повторении заказа.'
+            })
 
 
 class OrderSingleView(RetrieveAPIView):
@@ -240,6 +253,7 @@ class AddressView(APIView):
                 apartment=apartment,
                 comment=comment
             )
+            new_address.save()
             return Response({
                 "status": True
             })
