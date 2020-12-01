@@ -11,10 +11,16 @@ class OrderFeedbackImageSerializer(serializers.ModelSerializer):
         fields = (
             'image',
         )
+class RestaurantFeedbackImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RestaurantFeedbackImage
+        fields = (
+            'image',
+        )
 
 
 class RestaurantFeedbackSerializer(serializers.ModelSerializer):
-
+    images = RestaurantFeedbackImageSerializer(many=True, read_only=True)
     class Meta:
         model = RestaurantFeedback
         fields = (
@@ -23,6 +29,7 @@ class RestaurantFeedbackSerializer(serializers.ModelSerializer):
             'overallPoint',
             'pros',
             'cons'
+            'images'
         )
 
 class OrderFeedbackSerializer(serializers.ModelSerializer):
@@ -35,4 +42,5 @@ class OrderFeedbackSerializer(serializers.ModelSerializer):
             'overallPoint',
             'pros',
             'cons',
+            'images'
         )

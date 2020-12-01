@@ -28,24 +28,24 @@ class RestaurantFeedback(models.Model):
 
 class OrderFeedback(models.Model):
 
-    user            = models.ForeignKey(
+    user                = models.ForeignKey(
         User,
         on_delete=models.SET_DEFAULT,
-        related_name='orderFeedbacks',
+        related_name=orderFeedbacks',
         default=None,
-        verbose_name = 'Пользователь'
+        verbose_name='Пользователь'
     )
-    order           = models.ForeignKey(
+    order               = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
         related_name='feedbacks',
         blank=True,
         null=True
     )
-    name            = models.CharField(('Имя'), max_length=200)
-    overallPoint    = models.IntegerField(verbose_name="Оценка заказа")
-    pros            = models.CharField(max_length=255, verbose_name='Плюсы', default='нет')
-    cons            =    models.CharField(max_length=255, verbose_name='Минусы', default='нет')
+    name                = models.CharField(('Имя'), max_length=200)
+    overallPoint        = models.IntegerField(verbose_name="Оценка заказа")
+    pros                = models.CharField(max_length=255, verbose_name='Плюсы', default='нет')
+    cons                = models.CharField(max_length=255, verbose_name='Минусы', default='нет')
 
 
 class RestaurantFeedbackImage(models.Model):
