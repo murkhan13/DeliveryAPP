@@ -76,7 +76,7 @@ class OrderFeedbacksView(APIView):
                 })
 
 
-    def delete(self, request):
+    def delete(self, request, *args, **kwargs):
         try:
             feedback_qs = OrderFeedback.objects.filter(pk=request.data['feedback'])
             if feedback_qs.exists():
@@ -115,7 +115,7 @@ class RestaurantFeedbacksView(APIView):
         feedback_serializer = RestaurantFeedbackSerializer(feedback, many=True, context = {'request': request})
         return Response(restaurant_serializer.data, feedback_serializer)
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         files = None
         if 'files' in request.data:
             try:
@@ -171,7 +171,7 @@ class RestaurantFeedbacksView(APIView):
                 })
 
 
-    def delete(self, request):
+    def delete(self, request, *args, **kwargs):
         try:
             feedback_qs = RestaurantFeedback.objects.filter(pk=request.data['feedback'])
             if feedback_qs.exists():
