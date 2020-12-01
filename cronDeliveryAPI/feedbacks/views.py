@@ -31,17 +31,16 @@ class OrderFeedbacksView(APIView):
     def post(self, request, *args, **kwargs):
         #file_serializer = OrderFeedbackImageSerializer
         files = None
-        if 'files' in request.data:
-            try:
-                order = Order.objects.filter(pk=self.kwargs['order_id'], user=self.request.user)
-                files = request.FILES.getlist('files', None)
-            except KeyError:
-                raise ParseError('Файлы при запросе были переданы неправильно.')
-        order_feedback = OrderFeedback(order=order, user=self.request.user)
+        try:
+            order = Order.objects.filter(pk=self.kwargs['order_id'], user=self.request.user)
+            files = request.FILES.getlist('files', None)
+        except KeyError:
+            raise ParseError('Файлы при запросе были переданы неправильно.')
+        order_feedback = OrderFeedback.objects.filter(order=order, user=self.request.user)
         if order_feedback.exists():
             return Response({
                 'status': False,
-                'detail': 'Вы уже оставили отзыва на данный заказ.'
+                'detail': 'Вы уже оставили отзыв на данный заказ.'
             })
         else:
             try:
