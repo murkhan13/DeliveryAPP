@@ -113,7 +113,10 @@ class RestaurantFeedbacksView(APIView):
         feedback = RestaurantFeedback.objects.filter(restaurant=restaurant)
         restaurant_serializer = RestaurantDetailSerializer(restaurant, many=True, context={'request': request})
         feedback_serializer = RestaurantFeedbackSerializer(feedback, many=True, context = {'request': request})
-        return Response({'restaurant':restaurant_serializer.data, 'feedbacks':feedback_serializer})
+        return Response({
+            'restaurant':restaurant_serializer.data,
+            'feedbacks':feedback_serializer.data
+        })
 
     def post(self, request, *args, **kwargs):
         files = None
