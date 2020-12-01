@@ -123,6 +123,7 @@ class RestaurantFeedbacksView(APIView):
                 files = request.FILES.getlist('files', None)
             except KeyError:
                 raise ParseError('Файлы при запросе были переданы неправильно.')
+        print(restaurant)
         restaurant_feedback = OrderFeedback(restaurant=restaurant, user=self.request.user)
         if restaurant_feedback.exists():
             return Response({
