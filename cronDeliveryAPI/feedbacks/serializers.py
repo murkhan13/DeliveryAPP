@@ -28,7 +28,7 @@ class RestaurantFeedbackSerializer(serializers.ModelSerializer):
             'name',
             'overallPoint',
             'pros',
-            'cons'
+            'cons',
             'images'
         )
 
