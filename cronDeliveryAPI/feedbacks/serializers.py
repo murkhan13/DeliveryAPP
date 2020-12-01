@@ -35,7 +35,7 @@ class RestaurantFeedbackSerializer(serializers.ModelSerializer):
 class OrderFeedbackSerializer(serializers.ModelSerializer):
     images = OrderFeedbackImageSerializer(many=True, read_only=True)
     class Meta:
-        model = Order
+        model = OrderFeedback
         fields = (
             'id',
             'name',
