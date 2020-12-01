@@ -109,7 +109,7 @@ class RestaurantFeedbacksView(APIView):
     """
 
     def get(self, request, *args, **kwargs):
-        restaurant = Restaurant.objects.get(pk=self.kwargs['restaurant_id'])
+        restaurant = Restaurant.objects.filter(pk=self.kwargs['restaurant_id'])
         feedback = RestaurantFeedback.objects.filter(restaurant=restaurant)
         restaurant_serializer = RestaurantDetailSerializer(restaurant, many=True, context={'request': request})
         feedback_serializer = RestaurantFeedbackSerializer(feedback, many=True, context = {'request': request})
