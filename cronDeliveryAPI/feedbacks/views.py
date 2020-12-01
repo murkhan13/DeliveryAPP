@@ -32,7 +32,7 @@ class OrderFeedbacksView(APIView):
         #file_serializer = OrderFeedbackImageSerializer
         files = None
         try:
-            order = Order.objects.filter(pk=self.kwargs['order_id'], user=self.request.user)
+            order = Order.objects.get(pk=self.kwargs['order_id'], user=self.request.user)
             files = request.FILES.getlist('files', None)
         except KeyError:
             raise ParseError('Файлы при запросе были переданы неправильно.')
