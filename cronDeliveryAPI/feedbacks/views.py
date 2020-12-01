@@ -27,7 +27,10 @@ class OrderFeedbacksView(APIView):
         order_feedback = OrderFeedback.objects.filter(order=order, user=self.request.user)
         order_serializer = OrderSerializer(order_qs, many=True, context={'request': request})
         feedback_serializer = OrderFeedbackSerializer(order_feedback, many=True, context={'request':request})
-        return Response(order_serializer.data,feedback_serializer)
+        return Response({
+            'order':order_serializer.data,
+            'feedback':feedback_serializer.data
+        })
 
     def post(self, request, *args, **kwargs):
         #file_serializer = OrderFeedbackImageSerializer
