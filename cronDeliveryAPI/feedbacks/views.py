@@ -117,14 +117,13 @@ class RestaurantFeedbacksView(APIView):
 
     def post(self, request, *args, **kwargs):
         files = None
-        if 'files' in request.data:
-            try:
-                restaurant = Restaurant.objects.get(pk=self.kwargs['restaurant_id'])
-                files = request.FILES.getlist('files', None)
-            except KeyError:
-                raise ParseError('Файлы при запросе были переданы неправильно.')
+        try:
+            restaurant = Restaurant.objects.get(pk=self.kwargs['restaurant_id'])
+            files = request.FILES.getlist('files', None)
+        except KeyError:
+            raise ParseError('Файлы при запросе были переданы неправильно.')
         print(restaurant)
-        restaurant_feedback = OrderFeedback(restaurant=restaurant, user=self.request.user)
+        restaurant_feedback = RestaurantFeedback(restaurant=restaurant, user=self.request.user)
         if restaurant_feedback.exists():
             return Response({
                 'status': False,
