@@ -31,7 +31,7 @@ class OrderFeedback(models.Model):
     user                = models.ForeignKey(
         User,
         on_delete=models.SET_DEFAULT,
-        related_name=orderFeedbacks',
+        related_name='orderFeedbacks',
         default=None,
         verbose_name='Пользователь'
     )
