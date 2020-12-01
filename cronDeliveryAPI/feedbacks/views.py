@@ -119,7 +119,7 @@ class RestaurantFeedbacksView(APIView):
         files = None
         if 'files' in request.data:
             try:
-                restaurant = Restaurant.objects.get(pk=self.kwargs['restaurant_id'])
+                restaurant = Restaurant.objects.get(pk=self.kwargs['restaurant_id'], p3)
                 files = request.FILES.getlist('files', None)
             except KeyError:
                 raise ParseError('Файлы при запросе были переданы неправильно.')
