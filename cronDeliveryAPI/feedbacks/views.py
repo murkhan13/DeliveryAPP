@@ -132,6 +132,7 @@ class RestaurantFeedbacksView(APIView):
         else:
             point = request.data['overallPoint']
             orders = Order.objects.filter(restaurant__icontains=restaurant.title, user=self.request.user)
+            print(orders)
             if len(orders) > 0:
                 try:
                     feedback = RestaurantFeedback.objects.create(
