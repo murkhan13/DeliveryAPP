@@ -110,10 +110,10 @@ class RestaurantFeedbacksView(APIView):
 
     def get(self, request, *args, **kwargs):
         restaurant = Restaurant.objects.get(pk=self.kwargs['restaurant_id'])
-        feedback = RestaurantFeedback.objects.filter(restaurant=restaurant, user=self.request.user)
+        feedback = RestaurantFeedback.objects.filter(restaurant=restaurant)
         restaurant_serializer = RestaurantDetailSerializer(restaurant, many=True, context={'request': request})
         feedback_serializer = RestaurantFeedbackSerializer(feedback, many=True, context = {'request': request})
-        return Response(restaurant_serializer.data, feedback_serializer)
+        return Response({'restaurant':restaurant_serializer.data, 'feedbacks':feedback_serializer})
 
     def post(self, request, *args, **kwargs):
         files = None
@@ -127,7 +127,7 @@ class RestaurantFeedbacksView(APIView):
         if restaurant_feedback.exists():
             return Response({
                 'status': False,
-                'detail': 'Вы уже оставили отзыва на данный заказ.'
+                'detail': 'Вы уже оставили отзыва на данный ресторан.'
             })
         else:
             point = request.data['overallPoint']
