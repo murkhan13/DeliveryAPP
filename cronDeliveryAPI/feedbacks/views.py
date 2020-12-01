@@ -21,10 +21,11 @@ from orders.serializers import OrderSerializer
 class OrderFeedbacksView(APIView):
     # parser_class = (FileUploadParser,)
 
-    def get(self, request, id=None, *args, **kwargs):
-        order = Order.objects.filter(pk=self.kwargs['order_id'])
+    def get(self, request, *args, **kwargs):
+        order_qs = Order.objects.filter(pk=self.kwargs['order_id'])
+        order = Order.objects.get(pk=self.kwargs['order_id'])
         order_feedback = OrderFeedback.objects.filter(order=order, user=self.request.user)
-        order_serializer = OrderSerializer(order, many=True, context={'request': request})
+        order_serializer = OrderSerializer(order_qs, many=True, context={'request': request})
         feedback_serializer = OrderFeedbackSerializer(order_feedback, many=True, context={'request':request})
         return Response(order_serializer.data,feedback_serializer)
 
