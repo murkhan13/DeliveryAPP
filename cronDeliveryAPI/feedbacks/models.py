@@ -3,10 +3,15 @@ from catalog.models import Restaurant
 from orders.models import Order
 from accounts.models import User
 from django.utils import timezone
-# Create your models here.
+
+
+
 
 class RestaurantFeedback(models.Model):
-
+    IS_EDITED = (
+        (u'N', u'Не отредактирован'),
+        (u'Y', u'Отредактирован'),
+    )
     user            = models.ForeignKey(
         User,
         on_delete=models.SET_DEFAULT,
@@ -21,11 +26,12 @@ class RestaurantFeedback(models.Model):
         blank=True,
         null=True
     )
+    editing         = models.CharField(('Статус редактирования'),max_length=100, choices=IS_EDITED, default='N')
     name            = models.CharField(('Имя'), max_length=200)
     overallPoint    = models.IntegerField(verbose_name="Общее впечателение о ресторане")
     pros            = models.CharField(max_length=255, verbose_name='Плюсы', default='нет')
     cons            = models.CharField(max_length=255, verbose_name='Минусы', default='нет')
-    created_at      = models.DateTimeField(("Отзыв добавлен создан"), default=timezone.now())
+    created_at      = models.DateTimeField(("Отзыв добавлен создан"),  default=timezone.now())
 
     class Meta:
         verbose_name_plural = "Отзывы к ресторанам"

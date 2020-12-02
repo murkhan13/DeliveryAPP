@@ -100,7 +100,7 @@ class OrderView(APIView):
         print(url)
         print(text)
         data = {"chat_id": '-463655212',  "text": text}
-        # requests.post(url, data)
+        requests.post(url, data)
 
         """
         order_items = []
