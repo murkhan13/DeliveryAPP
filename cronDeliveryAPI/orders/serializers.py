@@ -1,6 +1,8 @@
 from catalog.serializers import UserSerializer, CartDishSerializer
 from catalog.models import CartItem
 from catalog.serializers import CategoriesSerializer, DishAdditivesSerializer, DishExtrasSerializer
+from feedbacks.serializers import OrderFeedbackSerializer
+from feedbacks.models import OrderFeedback
 
 from orders.models import *
 from rest_framework import serializers
@@ -73,7 +75,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
 
     order_items = OrderItemSerilalizer(many=True,read_only=True)
-
+    feedbacks = OrderFeedbackSerializer(many=True,read_only=True)
     class Meta:
         model = Order
         fields = (
@@ -89,6 +91,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'address',
             'comment',
             'deliverTo',
+            'feedbacks',
             'created_at',
         )
 

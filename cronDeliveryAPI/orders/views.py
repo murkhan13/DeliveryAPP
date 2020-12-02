@@ -41,24 +41,10 @@ class OrderView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
-    def get(self, request, pk=None):
-
-        user_orders = Order.objects.filter(user=self.request.user)
-
-        serializer = OrderSerializer(user_orders, many=True)
-        return Response(serializer.data)
-
     def get(self, request, *args, **kwargs):
-        try:
-            orders = Order.objects.filter(user=self.request.user)
-            serializer = OrderSerializer(orders, many=True, context={'request': request})
-
-            return Response(serializer.data)
-        except:
-            return Response({
-                "status": False,
-                "detail": "Ошибка при получении заказов пользователя"
-            })
+        orders = Order.objects.filter(user=self.request.user)
+        serializer = OrderSerializer(orders, many=True, context={'request': request})
+        return Response(serializer.data)
 
 
     def post(self, request, pk=None):
@@ -114,7 +100,7 @@ class OrderView(APIView):
         print(url)
         print(text)
         data = {"chat_id": '-463655212',  "text": text}
-        requests.post(url, data)
+        # requests.post(url, data)
 
         """
         order_items = []

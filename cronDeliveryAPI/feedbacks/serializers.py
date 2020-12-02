@@ -29,7 +29,8 @@ class RestaurantFeedbackSerializer(serializers.ModelSerializer):
             'overallPoint',
             'pros',
             'cons',
-            'images'
+            'images',
+            'created_at'
         )
 
 class OrderFeedbackSerializer(serializers.ModelSerializer):
@@ -42,5 +43,6 @@ class OrderFeedbackSerializer(serializers.ModelSerializer):
             'overallPoint',
             'pros',
             'cons',
-            'images'
+            'images',
+            'created_at'
         )

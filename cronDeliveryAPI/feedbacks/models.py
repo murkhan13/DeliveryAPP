@@ -2,7 +2,7 @@ from django.db import models
 from catalog.models import Restaurant
 from orders.models import Order
 from accounts.models import User
-
+from django.utils import timezone
 # Create your models here.
 
 class RestaurantFeedback(models.Model):
@@ -25,6 +25,13 @@ class RestaurantFeedback(models.Model):
     overallPoint    = models.IntegerField(verbose_name="Общее впечателение о ресторане")
     pros            = models.CharField(max_length=255, verbose_name='Плюсы', default='нет')
     cons            = models.CharField(max_length=255, verbose_name='Минусы', default='нет')
+    created_at      = models.DateTimeField(("Отзыв добавлен создан"), default=timezone.now())
+
+    class Meta:
+        verbose_name_plural = "Отзывы к ресторанам"
+
+    def __str__(self):
+        return '%s отставил отзыв к %s' %(self.name, self.restaurant)
 
 class OrderFeedback(models.Model):
 
@@ -46,6 +53,12 @@ class OrderFeedback(models.Model):
     overallPoint        = models.IntegerField(verbose_name="Оценка заказа")
     pros                = models.CharField(max_length=255, verbose_name='Плюсы', default='нет')
     cons                = models.CharField(max_length=255, verbose_name='Минусы', default='нет')
+    created_at      = models.DateTimeField(("Заказ создан"),default=timezone.now())
+    class Meta:
+        verbose_name_plural = "Отзывы к заказам"
+
+    def __str__(self):
+        return '%s отставил отзыв к %s' %(self.name, self.order)
 
 
 class RestaurantFeedbackImage(models.Model):

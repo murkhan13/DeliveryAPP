@@ -2,7 +2,8 @@
 from rest_framework import serializers
 from rest_framework.fields import CurrentUserDefault
 from accounts.models import User
-
+from feedbacks.models import RestaurantFeedback
+from feedbacks.serializers import RestaurantFeedbackSerializer
 
 from .models import *
 
@@ -120,6 +121,7 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
             'feedbacksAmount',
             'rating'
         )
+
 
 
 """
