@@ -671,7 +671,6 @@ class FavoriteRestaurantsView(APIView):
         # user_liked = User.objects.get(pk=self.request.user.id)
         restaurant = Restaurant.objects.get(title=restaurant_title)
         restaurant.likedUsers.add(self.request.user)
-
         return Response({
             "status": True,
             "detail": "Ресторан добавлен в список любимых"

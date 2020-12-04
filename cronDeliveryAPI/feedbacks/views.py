@@ -137,7 +137,7 @@ class RestaurantFeedbacksView(APIView):
                 'detail': 'Вы уже оставили отзыва на данный ресторан.'
             })
         else:
-            point = request.data['overallPoint']
+            point = int(request.data['overallPoint'])
             orders = Order.objects.filter(restaurant__icontains=restaurant.title, user=self.request.user)
             print(orders)
             if len(orders) > 0:
@@ -160,6 +160,7 @@ class RestaurantFeedbacksView(APIView):
                     restaurant.feedbacksAmount += 1
                     restaurant.sumOfPoints += point
                     restaurant.save()
+                    print(restaurant.feedbacksAmount)
                     if restaurant.feedbacksAmount > 0:
                         restaurant.rating = restaurant.sumOfPoints / restaurant.feedbacksAmount
                         restaurant.save()
