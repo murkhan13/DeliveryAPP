@@ -661,7 +661,7 @@ class FavoriteRestaurantsView(APIView):
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        restaurant_title = str(request.data['restaurant_title'])
+        restaurant_title = str(request.data.get('restaurant_title'))
         # except:
         #     return Response({
         #         'status': False,
