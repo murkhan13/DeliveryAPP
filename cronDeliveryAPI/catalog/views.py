@@ -661,14 +661,12 @@ class FavoriteRestaurantsView(APIView):
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        try:
-            restaurant_title = str(request.data['restaurant_title'])
-            print(request.method)
-        except:
-            return Response({
-                'status': False,
-                'detail': 'Ошибка добавления ресторана в список любимых'
-            })
+        restaurant_title = str(request.data['restaurant_title'])
+        # except:
+        #     return Response({
+        #         'status': False,
+        #         'detail': 'Ошибка добавления ресторана в список любимых'
+        #     })
 
         # user_liked = User.objects.get(pk=self.request.user.id)
         restaurant = Restaurant.objects.get(title=restaurant_title)
