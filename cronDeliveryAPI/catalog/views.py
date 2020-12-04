@@ -662,7 +662,7 @@ class FavoriteRestaurantsView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            restaurant_title = request.data.get('restaurant_title')
+            restaurant_title = str(request.data['restaurant_title'])
             print(request.method)
         except:
             return Response({
