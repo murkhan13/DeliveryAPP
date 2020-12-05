@@ -153,6 +153,7 @@ class RestaurantFeedbacksView(APIView):
                     feedback.save()
                     print(files)
                     if files != None:
+                        print(files)
                         for img in files:
                             RestaurantFeedbackImage.objects.create(
                                 feedback=feedback,
