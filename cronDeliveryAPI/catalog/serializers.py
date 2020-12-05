@@ -128,7 +128,7 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
         amount = len(RestaurantFeedback.objects.filter(restaurant=obj))
         return amount
     def int_rating(self, obj):
-        return int(obj.rating)
+        return None
 
 
 
