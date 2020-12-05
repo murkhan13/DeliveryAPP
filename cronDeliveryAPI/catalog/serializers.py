@@ -102,6 +102,8 @@ class CategoryItemsSearchSerializer(serializers.ModelSerializer):
 
 class RestaurantDetailSerializer(serializers.ModelSerializer):
     feedbacksAmount = serializers.SerializerMethodField('get_amount')
+    rating = serializers.SerializerMethodField('int_rating')
+
     class Meta:
         model = Restaurant
         fields = (
@@ -125,6 +127,9 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
     def get_amount(self, obj):
         amount = len(RestaurantFeedback.objects.filter(restaurant=obj))
         return amount
+    def int_rating(self, obj):
+        return int(obj.rating)
+
 
 
 
