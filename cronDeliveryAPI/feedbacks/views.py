@@ -151,12 +151,14 @@ class RestaurantFeedbacksView(APIView):
                         cons=request.data['cons']
                     )
                     feedback.save()
+                    print(files)
                     if files != None:
                         for img in files:
                             RestaurantFeedbackImage.objects.create(
                                 feedback=feedback,
                                 image=img
                             )
+                            print(img)
                     restaurant.feedbacksAmount += 1
                     restaurant.sumOfPoints += point
                     restaurant.save()
