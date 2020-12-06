@@ -5,8 +5,22 @@ from catalog.models import Restaurant
 
 
 class RestaurantFeedbackImagesInline(admin.TabularInline):
+    '''Tabular Inline View for restaurant feedback images'''
     fk_name='feedback'
     model = RestaurantFeedbackImage
+
+
+class OrderFeedbackImagesInline(admin.TabularInline):
+    '''Tabular Inline View for order feedback images'''
+    fk_name='feedback'
+    model = OrderFeedbackImage
+
+
+class OrderFeedbackAdmin(admin.ModelAdmin):
+    inlines = [
+        OrderFeedbackImagesInline,
+    ]
+
 
 
 class RestaurantFeedbackAdmin(admin.ModelAdmin):
@@ -26,4 +40,4 @@ class RestaurantFeedbackAdmin(admin.ModelAdmin):
 
 
 admin.site.register(RestaurantFeedback, RestaurantFeedbackAdmin)
-admin.site.register(OrderFeedback)
+admin.site.register(OrderFeedback, OrderFeedbackAdmin)
