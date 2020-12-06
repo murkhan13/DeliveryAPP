@@ -94,9 +94,9 @@ class OrderView(APIView):
                 for ext in cart_item.extra.all():
                     text += ext.name
             cart_item.save()
-        text += '\n Адрес доставки: {0} \n Комментарий: {1}'.format(address, comment)
-        text += '\n Ресторан: {0} количество персон: {1}, способ оплаты: {2}, доставить к: {3}'.format(restaurant, personsAmount, paymentMode, deliverTo)
-        text += '\n Телефон: {0}, Итог: {1}руб. \n'.format(phone, total)
+        text += '\n Адрес доставки: {0} \nКомментарий: {1}'.format(address, comment)
+        text += '\n Ресторан: {0}\nКоличество персон: {1}\nCпособ оплаты: {2}, доставить к: {3}'.format(restaurant, personsAmount, paymentMode, deliverTo)
+        text += '\n Телефон: {0}\nИтог: {1}руб. \n'.format(phone, total)
         print(url)
         print(text)
         data = {"chat_id": '-463655212',  "text": text}

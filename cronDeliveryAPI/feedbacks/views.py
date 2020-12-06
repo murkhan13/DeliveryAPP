@@ -57,7 +57,9 @@ class OrderFeedbacksView(APIView):
                     cons=request.data['cons']
                 )
                 feedback.save()
+                print('files:', files)
                 if files != None:
+                    print('files:', files)
                     for img in files:
                         OrderFeedbackImage.objects.create(
                             feedback=feedback,
