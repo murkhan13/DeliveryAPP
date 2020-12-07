@@ -38,6 +38,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 # ALLOWED_HOSTS = ALLOWED_HOSTS.split(" ")
 
 ALLOWED_HOSTS = [
+    'api.crondostav.ru',
     'crondostav.ru',
     'delivery-api-cron.herokuapp.com',
     '127.0.0.1',
