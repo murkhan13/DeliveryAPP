@@ -30,8 +30,11 @@ class RestaurantMenuAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form , change):
         for category in obj.categories.all():
-            category.name = '{0} - {1}'.format(category.name, obj.restaurant.title)
-            category.save()
+            if obj.restaurant.title not in category.name:
+                category.name = '{0} - {1}'.format(category.name, obj.restaurant.title)
+                category.save()
+            else:
+                pass
 
 
 class RestaurantAdmin(admin.ModelAdmin):

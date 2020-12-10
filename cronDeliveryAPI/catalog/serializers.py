@@ -83,12 +83,17 @@ class DishDetailSerializer(serializers.ModelSerializer):
 
 
 class CategoryItemsSerializer(serializers.ModelSerializer):
-
+    name=serializers.SerializerMethodField('get_name')
     dishes = DishDetailSerializer(many=True, read_only = True)
 
     class Meta:
         model = Category
         fields =  ['id', 'name', 'dishes']
+
+    def get_name(self, obj):
+        index = obj.name.index('-')
+        name = obj.name[:index-1]
+        return name
 
 
 class CategoryItemsSearchSerializer(serializers.ModelSerializer):

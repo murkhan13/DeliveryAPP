@@ -53,8 +53,6 @@ class SearchingCategory(models.Model):
         verbose_name_plural = "Категории для поиска"
 
 
-
-
 class Restaurant(models.Model):
     """
     Model class that represent a restaurant model
@@ -97,6 +95,20 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        logo = Image.open(self.logo.path)
+        image = Image.open(self.image.path)
+
+        if logo.height > 1024 or logo.width > 1024:
+            output_size = (1024, 1024)
+            logo.thumbnail(output_size)
+            logo.save(self.logo.path)
+        if image.height > 1024 or image.width > 1024:
+            output_size = (1024, 1024)
+            logo.thumbnail(output_size)
+            logo.save(self.image.path)
+
     def get_image_url(self, obj):
         return obj.logo.url
 
@@ -133,8 +145,8 @@ class Dish(models.Model):
         super().save(*args, **kwargs)
         img = Image.open(self.image.path)
 
-        if img.height > 600 or img.width > 600:
-            output_size = (600, 600)
+        if img.height > 1024 or img.width > 1024:
+            output_size = (1024, 1024)
             img.thumbnail(output_size)
             img.save(self.image.path)
 
