@@ -8,7 +8,9 @@ from django.utils import timezone
 
 from accounts.models import User
 from orders.models import Order
-from PIL import Image
+from PIL import Image, ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 
 
 class Category(models.Model):
