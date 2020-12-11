@@ -110,23 +110,6 @@ class Restaurant(models.Model):
             output_size = (1200, 350)
             image.thumbnail(output_size)
             image.save(self.image.path)
-    # def save(self, *args, **kwargs):
-        # instance = super(Restaurant, self).save(*args, **kwargs)
-        # logo = Image.open(self.logo.path)
-        # image = Image.open(self.image.path)
-        # output = BytesIO()
-        # logo = logo.resize(299, 1024)
-        # logo.save(output, format='JPEG')
-        # logo = logo.save(self.logo.path, quality=60, optimize=True)
-        # image = image.save(self.image.path, quality=60, optimize=True)
-        # if  logo.height > 640 or logo.width > 640 :
-        #     output_size = (640, 640)
-        #     logo.thumbnail(output_size)
-        #     logo.save(self.logo.path)
-        # if image.height > 480  or image.width > 1056:
-        #     output_size = (480, 1056)
-        #     logo.thumbnail(output_size)
-        #     logo.save(self.image.path)
 
     def get_image_url(self, obj):
         return obj.logo.url
