@@ -12,7 +12,6 @@ from PIL import Image, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
-
 class Category(models.Model):
     # Model representing a dish category
     name    = models.CharField(("Название категории"),max_length=200, help_text='Введите категорию блюда(например, супы, салаты, пицца и т.д.')
@@ -100,16 +99,34 @@ class Restaurant(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         logo = Image.open(self.logo.path)
-        image = Image.open(self.image.path)
 
-        if logo.height > 1024 or logo.width > 1024:
-            output_size = (1024, 1024)
+        if logo.width > 600 or logo.height > 600:
+            output_size = (600, 600)
             logo.thumbnail(output_size)
             logo.save(self.logo.path)
-        if image.height > 1024 or image.width > 1024:
-            output_size = (1024, 1024)
-            logo.thumbnail(output_size)
-            logo.save(self.image.path)
+        image = Image.open(self.image.path)
+
+        if image.width > 1024 or image.height > 1024:
+            output_size = (1200, 350)
+            image.thumbnail(output_size)
+            image.save(self.image.path)
+    # def save(self, *args, **kwargs):
+        # instance = super(Restaurant, self).save(*args, **kwargs)
+        # logo = Image.open(self.logo.path)
+        # image = Image.open(self.image.path)
+        # output = BytesIO()
+        # logo = logo.resize(299, 1024)
+        # logo.save(output, format='JPEG')
+        # logo = logo.save(self.logo.path, quality=60, optimize=True)
+        # image = image.save(self.image.path, quality=60, optimize=True)
+        # if  logo.height > 640 or logo.width > 640 :
+        #     output_size = (640, 640)
+        #     logo.thumbnail(output_size)
+        #     logo.save(self.logo.path)
+        # if image.height > 480  or image.width > 1056:
+        #     output_size = (480, 1056)
+        #     logo.thumbnail(output_size)
+        #     logo.save(self.image.path)
 
     def get_image_url(self, obj):
         return obj.logo.url
