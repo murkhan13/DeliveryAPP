@@ -230,6 +230,18 @@ class Cart(models.Model):
     class Meta:
         verbose_name_plural = "Корзина"
 
+    def delete(self):
+        items = CartItem.objects.filter(cart=self)
+        if items.exists():
+            for item in items:
+                print(item)
+                if item.order == None:
+                    item.delete()
+                else:
+                    pass
+        super(Cart, self).delete()
+
+
 
 class CartItem(models.Model):
     """
@@ -243,7 +255,7 @@ class CartItem(models.Model):
     """
     cart = models.ForeignKey(
         Cart,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="items",

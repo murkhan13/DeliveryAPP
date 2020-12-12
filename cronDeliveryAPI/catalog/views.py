@@ -289,17 +289,16 @@ class CartItemAddView(APIView):
         # Cart.objects.all().delete()
         # CartItem.objects.all().delete()
         if request.user.is_authenticated:
-            print("USER AUTH-D: ", request.user)
-            try:
-                cart = Cart.objects.get(user=self.request.user)
-                print(Cart.objects.filter(user=self.request.user))
-            except:
+            # print(len(Cart.objects.filter(user=self.request.user)))
+            if Cart.objects.filter(user=self.request.user).exists():
+                cart = Cart.objects.filter(user=self.request.user).first()
+            else:
                 cart = Cart.objects.create(user=self.request.user)
                 cart.save()
         else:
-            try:
-               cart = Cart.objects.get(device_token=self.request.GET['device_token'])
-            except:
+            if Cart.objects.filter(device_token=self.request.GET['device_token']).exists():
+                cart = Cart.objects.filter(device_token=self.request.GET['device_token']).first()
+            else:
                 cart = Cart.objects.create(device_token=self.request.GET['device_token'])
                 cart.save()
         context = {
@@ -314,15 +313,15 @@ class CartItemAddView(APIView):
         # if user logged in get cart of authorized customer else get cart of unauthorized customer
         if request.user.is_authenticated:
             # print(len(Cart.objects.filter(user=self.request.user)))
-            try:
-                cart = Cart.objects.get(user=self.request.user)
-            except:
+            if Cart.objects.filter(user=self.request.user).exists():
+                cart = Cart.objects.filter(user=self.request.user).first()
+            else:
                 cart = Cart.objects.create(user=self.request.user)
                 cart.save()
         else:
-            try:
-               cart = Cart.objects.get(device_token=request.data['device_token'])
-            except:
+            if Cart.objects.filter(device_token=request.data['device_token']).exists():
+                cart = Cart.objects.filter(device_token=request.data['device_token']).first()
+            else:
                 cart = Cart.objects.create(device_token=request.data['device_token'])
                 cart.save()
         context = {
@@ -455,7 +454,7 @@ class CartItemAddView(APIView):
                         flag = True
 
                 if flag == True:
-                    existing_cart_item.quantity = quantity
+                    existing_cart_item.quantity += quantity
                     existing_cart_item.save()
                     return Response({
                         "status": True
@@ -503,16 +502,16 @@ class CartItemEditView(APIView):
     def post(self,request,pk=None):
 
         if request.user.is_authenticated:
-            print(len(Cart.objects.filter(user=self.request.user)))
-            try:
-                cart = Cart.objects.get(user=self.request.user)
-            except:
+            # print(len(Cart.objects.filter(user=self.request.user)))
+            if Cart.objects.filter(user=self.request.user).exists():
+                cart = Cart.objects.filter(user=self.request.user).first()
+            else:
                 cart = Cart.objects.create(user=self.request.user)
                 cart.save()
         else:
-            try:
-               cart = Cart.objects.get(device_token=request.data['device_token'])
-            except:
+            if Cart.objects.filter(device_token=request.data['device_token']).exists():
+                cart = Cart.objects.filter(device_token=request.data['device_token']).first()
+            else:
                 cart = Cart.objects.create(device_token=request.data['device_token'])
                 cart.save()
         try:
