@@ -84,7 +84,7 @@ class OrderView(APIView):
 
         for cart_item in cart.items.all():
             cart_item.order = order
-            # cart_item.cart = None
+            cart_item.cart = None
             text += str(cart_item.title) + '\nКоличество: ' + str(cart_item.quantity)
             if len(cart_item.additives.all()) > 0:
                 text += '\n Добавка: '
