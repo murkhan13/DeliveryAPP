@@ -3,6 +3,8 @@ from catalog.models import Restaurant
 from orders.models import Order
 from accounts.models import User
 from django.utils import timezone
+from PIL import Image, ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 
@@ -77,6 +79,16 @@ class RestaurantFeedbackImage(models.Model):
     )
     image       = models.ImageField(("Картинка отзыва"),upload_to="feedbacks", default = 'not_found.jpg')
 
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        image = Image.open(self.image.path)
+
+        if image.height > 1024 or image.width > 1024:
+            output_size = (1024, 1024)
+            image.thumbnail(output_size)
+            image.save(self.image.path)
+
 class OrderFeedbackImage(models.Model):
     feedback    = models.ForeignKey(
         OrderFeedback,
@@ -86,3 +98,13 @@ class OrderFeedbackImage(models.Model):
         null=True
     )
     image       = models.FileField(("Картинка ресторана"),upload_to="feedbacks", default = 'not_found.jpg')
+
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        image = Image.open(self.image.path)
+
+        if image.height > 1024 or image.width > 1024:
+            output_size = (1024, 1024)
+            image.thumbnail(output_size)
+            image.save(self.image.path)

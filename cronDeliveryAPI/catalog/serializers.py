@@ -110,6 +110,18 @@ class CategoryItemsSearchSerializer(serializers.ModelSerializer):
         return name
 
 
+class RestaurantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restaurant
+        fields =(
+            'id',
+            'title',
+            'longitude',
+            'latitude',
+            'info'
+        )
+
+
 class RestaurantDetailSerializer(serializers.ModelSerializer):
     feedbacksAmount = serializers.SerializerMethodField('get_amount')
     rating = serializers.SerializerMethodField('int_rating')

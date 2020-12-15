@@ -141,7 +141,13 @@ class GlobalSearchView(APIView):
                     Q(category__name__icontains=search_term)
                 )
                 if len(dishes) == 0:
-                    return Response({
+                    return Response({'id',
+            'title',
+            'price',
+            'image',
+            'description',
+            'portionWeight',
+            'category',
                         'status': False,
                         'detail': "По данному запросу ничего не было найдено."
                     })
@@ -187,6 +193,14 @@ class GlobalSearchView(APIView):
                 "status": False,
                 "detail": "Ничего не найдено."
             })
+
+
+class RestaurantShortcutView(APIView):
+    def get(self, request, *args, **kwargs):
+        restaurants_qs = Restaurant.objects.all()
+        serializer = RestaurantSerializer(restaurants_qs, many=True, context={'request':request})
+        return Response(serializer.data)
+
 
 class RestaurantView(ListModelMixin, GenericAPIView):
     permission_classes = [AllowAny, ]
