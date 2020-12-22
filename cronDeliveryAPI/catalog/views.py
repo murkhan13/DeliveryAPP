@@ -141,13 +141,7 @@ class GlobalSearchView(APIView):
                     Q(category__name__icontains=search_term)
                 )
                 if len(dishes) == 0:
-                    return Response({'id',
-            'title',
-            'price',
-            'image',
-            'description',
-            'portionWeight',
-            'category',
+                    return Response({
                         'status': False,
                         'detail': "По данному запросу ничего не было найдено."
                     })

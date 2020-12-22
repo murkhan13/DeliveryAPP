@@ -29,8 +29,17 @@ class RestaurantMenuAdmin(admin.ModelAdmin):
     inlines = (CategoryInline,)
 
     def save_model(self, request, obj, form , change):
+        # obj = super(RestaurantMenuAdmin, self).save_model(request, obj, form , change)
+        super(RestaurantMenuAdmin,self).save_model(request,obj,form, change)
+        # obj = super(RestaurantMenuAdmin, self).save_model(request,obj,form, change)
+        print(obj.restaurant)
+        categories = Category.objects.filter(restaurants__restaurant__title=obj.restaurant.title)
+        print(categories)
+        print(obj.categories)
         for category in obj.categories.all():
+            print('1',obj)
             if obj.restaurant.title not in category.name:
+                print('2', obj)
                 category.name = '{0} - {1}'.format(category.name, obj.restaurant.title)
                 category.save()
             else:
