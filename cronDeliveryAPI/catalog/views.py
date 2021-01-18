@@ -120,7 +120,10 @@ class GlobalSearchView(APIView):
                 print("search:", search_term)
 
                 category_names = []
-                categorees = Category.objects.filter(dishes__title__icontains=search_term)
+                categorees = Category.objects.filter(
+                    Q(dishes__title__icontains=search_term) |
+                    Q(name__icontains=search_term)
+                )
                 for i in range(len(categorees)):
                     category_names.append(categorees[i])
 
@@ -146,16 +149,10 @@ class GlobalSearchView(APIView):
                         'detail': "По данному запросу ничего не было найдено."
                     })
                 else:
-                    categories_qs = []
-                    for category in Category.objects.all():
-                        for dish in dishes:
-                            if category in dish.category.all():
-                                if category not in categories_qs:
-                                    categories_qs.append(category)
+                    categories_qs = Category.objects.filter(dishes__in=dishes).distinct()
                     final_list = []
                     restaurantmenu_qs = RestaurantMenu.objects.filter(categories__in=categories_qs).distinct()
                     restaurantmenu_qs = restaurantmenu_qs.filter(restaurant__worksFrom__lt=timezone.now().time()).filter(restaurant__worksTo__gt=timezone.now().time())
-                    print('time:', timezone.now().time())
                     paginator = Paginator(restaurantmenu_qs, 10)
                     restaurantmenu_qs = paginator.page(page)
                     search_response_dict = {}
@@ -164,7 +161,7 @@ class GlobalSearchView(APIView):
                         categorees = restaurantmenu.categories.all()
                         rest_dict = {}
                         restaurant_qs = Restaurant.objects.filter(title=restaurantmenu.restaurant.title)
-                        restaurant_dishes = Dish.objects.filter(title__icontains=search_term, category__in=categorees)
+                        restaurant_dishes=dishes.filter(restaurant__icontains=restaurantmenu.restaurant.title)
                         rest_dict['restaurant'] = RestaurantDetailSerializer(restaurant_qs, many=True, context={'request':request}).data[0]
                         rest_dict['dishes'] = DishDetailSerializer(restaurant_dishes, many=True, context={'request':request}).data
                         final_list.append(rest_dict)

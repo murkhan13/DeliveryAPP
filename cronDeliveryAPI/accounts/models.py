@@ -44,7 +44,6 @@ class UserManager(BaseUserManager):
         user_obj.staff = is_staff
         user = user_obj
         user.save(using=self._db)
-        return user
         user = self.create_user(
             phone,
             password=password,
@@ -53,12 +52,10 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, phone, password, is_active=True, is_staff=True, is_admin=True):
-
         if not phone :
             raise ValueError('Пользователь должен иметь номер телефона')
         if not password:
             raise ValueError('Пользователь должен иметь пароль')
-
         user_obj = self.model(
             phone=phone
         )
@@ -157,7 +154,6 @@ class PhoneOTP(models.Model):
     otp                 = models.CharField(max_length = 9, blank = True, null = True)
     count               = models.IntegerField(default = 0, help_text = 'Number of otp sent')
     validated           = models.BooleanField(default = False, help_text='If it is true, that means user have validate otp correctly in second API')
-    favoriteRestaurants = models
 
     def __str__(self):
         return str(self.phone) + ' is sent ' + str(self.otp)

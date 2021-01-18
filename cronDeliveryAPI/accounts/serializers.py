@@ -68,11 +68,7 @@ class LoginSerializer(serializers.Serializer):
                 'status': False
             }
             raise serializers.ValidationError(msg, code='authorization')
-        
+
         data['user'] = user
         data['user_exists'] = (user_exists)
         return data
-
-
-        
-    

@@ -64,7 +64,6 @@ INSTALLED_APPS = [
     'accounts',
     'knox',
     'orders',
-
     # 'fcm_django'
 ]
 
@@ -193,7 +192,7 @@ from datetime import timedelta
 
 REST_KNOX = {
     'USER_SERIALIZER': 'accounts.serializers.UserSerializer',
-    'TOKEN_TTL': timedelta(hours= 24*14),
+    'TOKEN_TTL': timedelta(hours= 24*60),
 }
 
 '''

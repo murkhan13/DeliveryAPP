@@ -32,7 +32,7 @@ class AddressInline(admin.TabularInline):
 
 
 class UserAdmin(BaseUserAdmin):
-    # form = UserAdminChangeForm 
+    # form = UserAdminChangeForm
     add_form = UserAdminCreationForm
 
     # The fields to be use in displayin in the User model
@@ -45,7 +45,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {
             "fields": (
-                'phone', 
+                'phone',
             ),
         }),
         ('Personal info', {
@@ -62,7 +62,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('phone', 'password1', 'password2') # 
+            'fields': ('phone', 'password1', 'password2')
         }),
     )
 
@@ -70,7 +70,6 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('phone','name')
     list_filter = ('phone', 'name')
     filter_horizontal = ()
-    
     def get_inline_instances(self, request, obj=None):
         if not obj:
             return list()

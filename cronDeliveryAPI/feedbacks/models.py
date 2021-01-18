@@ -79,7 +79,6 @@ class RestaurantFeedbackImage(models.Model):
     )
     image       = models.ImageField(("Картинка отзыва"),upload_to="feedbacks", default = 'not_found.jpg')
 
-
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         image = Image.open(self.image.path)
@@ -98,7 +97,6 @@ class OrderFeedbackImage(models.Model):
         null=True
     )
     image       = models.FileField(("Картинка ресторана"),upload_to="feedbacks", default = 'not_found.jpg')
-
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
